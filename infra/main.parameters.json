@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "apiCenterName": {
+      "value": "${AZURE_API_CENTER}"
+    },
+    "useApplicationInsights": {
+      "value": "${USE_APPLICATION_INSIGHTS=true}"
+    },
+    "logAnalyticsName": {
+      "value": "${AZURE_LOG_ANALYTICS}"
+    },
+    "applicationInsightsName": {
+      "value": "${AZURE_APPLICATION_INSIGHTS}"
+    },
+    "applicationInsightsDashboardName": {
+      "value": "${AZURE_APPLICATION_INSIGHTS_DASHBOARD}"
+    },
+    "appServicePlanName": {
+      "value": "${AZURE_APP_SERVICE_PLAN}"
+    },
+    "appServiceSkuName": {
+      "value": "${AZURE_APP_SERVICE_SKU=B1}"
+    },
+    "appServiceNodeName": {
+      "value": "${AZURE_APP_SERVICE_NODE}"
+    },
+    "appServiceDotNetName": {
+      "value": "${AZURE_APP_SERVICE_DOTNET}"
+    },
+    "staticAppSkuName": {
+      "value": "${AZURE_STATIC_APP_SKU=Free}"
+    },
+    "staticAppNodeName": {
+      "value": "${AZURE_STATIC_APP_NODE}"
+    },
+    "staticAppDotNetName": {
+      "value": "${AZURE_STATIC_APP_DOTNET}"
+    },
+    "apiManagementName": {
+      "value": "${AZURE_API_MANAGEMENT}"
+    },
+    "apiManagementPublisherName": {
+      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_NAME=n/a}"
+    },
+    "apiManagementPublisherEmail": {
+      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_EMAIL=noreply@microsoft.com}"
+    }
+  }
+}
