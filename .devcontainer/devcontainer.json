@@ -1,0 +1,58 @@
+{
+  "name": "Azure Developer CLI",
+
+  "image": "mcr.microsoft.com/devcontainers/dotnet:8.0-jammy",
+
+  "features": {
+    "ghcr.io/azure/azure-dev/azd:latest": {},
+    "ghcr.io/devcontainers/features/azure-cli:latest": {
+      "extensions": "account,apic-extension,deploy-to-azure,functionapp,subscription,webapp"
+    },
+    "ghcr.io/devcontainers/features/common-utils:latest": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:latest": {},
+    "ghcr.io/devcontainers/features/dotnet:latest": {
+      "version": "6.0",
+      "additionalVersions": "7.0"
+    },
+    "ghcr.io/devcontainers/features/github-cli:latest": {},
+    "ghcr.io/devcontainers/features/node:latest": {},
+    "ghcr.io/devcontainers/features/powershell:latest": {}
+  },
+
+  "overrideFeatureInstallOrder": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "apidev.azure-api-center",
+        "dbaeumer.vscode-eslint",
+        "EditorConfig.EditorConfig",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-github-actions",
+        "ms-azuretools.vscode-apimanagement",
+        "ms-azuretools.vscode-bicep",
+        "ms-azuretools.vscode-docker",
+        "ms-dotnettools.csdevkit",
+        "ms-vscode.powershell",
+        "ms-vscode.vscode-node-azure-pack"
+      ]
+    }
+  },
+
+  "forwardPorts": [
+    5000, 5001, 5050, 5051, 8000, 8001, 8080, 8081
+  ],
+
+  "onCreateCommand": "/usr/bin/zsh ./.devcontainer/on-create.sh > ~/on-create.log",
+
+  "remoteUser": "vscode",
+
+  "hostRequirements": {
+    "memory": "8gb"
+  }
+}
