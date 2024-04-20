@@ -1,0 +1,13 @@
+# Source: https://docs.stoplight.io/docs/spectral/4dec24461f3af-open-api-rules
+extends:
+  - spectral:oas
+rules:
+  api-version-convention:
+    description: API version should follow the convention
+    given: $.info.version
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^v[0-9\\.]+$"
+      message: API version should follow the convention v1, v2.1, v3.0.1, etc.

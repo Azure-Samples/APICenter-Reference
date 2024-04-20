@@ -1,57 +1,102 @@
-# Project Name
+# API Center Reference
 
-(short, 1-3 sentenced, description of the project)
+Throughout this reference sample, we'd like to give developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
 
-## Features
+- API Inventory
+  - To Showcase API Management integration to quickly build API inventory from many API Management instances
+  - To register APIs manually or through GitHub Actions workflow
+- API Governance
+  - To perform shift-left API governance functionality in VS Code
+  - To run APIC Analyzer for server-side linting
+  - To manage custom metadata
+  - To handle events through Azure Event Grid and Logic Apps
+- API Discovery and Consumption
+  - To integrate the client SDK in .NET & JavaScript
+  - To prepare the server app scaffolding in .NET and JavaScript
+  - To manage API Center OSS portal
 
-This project framework provides the following features:
+## Prerequisites
 
-* Feature 1
-* Feature 2
-* ...
+- Azure Subscription
+- Visual Studio Code with API Center extension
+- Azure Developer CLI
+- Azure CLI with API Center extension
+- GitHub CLI
 
 ## Getting Started
 
-### Prerequisites
+1. Fork this repository.
+1. Clone the forked repository to your local machine.
+1. Login to Azure Developer CLI.
 
-(ideally very short, if any)
+    ```bash
+    azd auth login
+    ```
 
-- OS
-- Library version
-- ...
+1. Provision all resources to Azure and deploy all the apps to those resources.
 
-### Installation
+    ```bash
+    azd up
+    ```
 
-(ideally very short)
+## CI/CD Pipelines
 
-- npm install [package name]
-- mvn install
-- ...
+As a default, CI/CD pipelines are disabled. To enable CI/CD pipelines, follow these steps.
 
-### Quickstart
-(Add steps to get up and running quickly)
+1. Configure the CI/CD pipeline.
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+    ```bash
+    azd pipeline config
+    ```
 
+1. Push your changes to the repository.
 
-## Demo
+## API Registration
 
-A demo app is included to show how to use the project.
+You can register APIs to API Center in various ways.
 
-To run the demo, follow these steps:
+### Azure Portal
 
-(Add steps to start up the demo)
+TBD
 
-1.
-2.
-3.
+### Azure CLI
+
+TBD
+
+### Visual Studio Code
+
+TBD
+
+### GitHub Actions
+
+TBD
+
+## API Center Analyzer
+
+API specifications can be linted using the API Center Analyzer.
+
+### Standalone Linting through Visual Studio Code
+
+TBD
+
+### Server-Side Linting through Azure Portal
+
+TBD
+
+## API Center Portal
+
+TBD
+
+## API Client SDK Integration
+
+TBD
+
+## API Server App Scaffolding
+
+TBD
 
 ## Resources
 
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+- [API Center Documentation](https://aka.ms/apicenter)
+- [API Center Analyzer](https://aka.ms/apicenter-analyzer)
+- [API Center Portal](https://aka.ms/apicenter-portal)
