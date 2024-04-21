@@ -11,6 +11,15 @@
     "apiCenterName": {
       "value": "${AZURE_API_CENTER}"
     },
+    "logicAppsName": {
+      "value": "${AZURE_LOGIC_APPS}"
+    },
+    "eventGridTopicName": {
+      "value": "${AZURE_EVENT_GRID_TOPIC}"
+    },
+    "eventGridTopicSubscriptionName": {
+      "value": "${AZURE_EVENT_GRID_TOPIC_SUBSCRIPTION=on-analysis-results-updated}"
+    },
     "useApplicationInsights": {
       "value": "${USE_APPLICATION_INSIGHTS=true}"
     },
@@ -48,10 +57,25 @@
       "value": "${AZURE_API_MANAGEMENT}"
     },
     "apiManagementPublisherName": {
-      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_NAME=n/a}"
+      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_NAME='Contoso'}"
     },
     "apiManagementPublisherEmail": {
-      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_EMAIL=noreply@microsoft.com}"
+      "value": "${AZURE_API_MANAGEMENT_PUBLISHER_EMAIL=apim@contoso.com}"
+    },
+    "apimProductName": {
+      "value": "${AZURE_API_MANAGEMENT_PRODUCT_NAME=default}"
+    },
+    "apimProductDisplayName": {
+      "value": "${AZURE_API_MANAGEMENT_PRODUCT_DISPLAY_NAME='Default Product'}"
+    },
+    "apimProductDescription": {
+      "value": "${AZURE_API_MANAGEMENT_PRODUCT_DESCRIPTION='This is the default product created by the template, which includes all APIs.'}"
+    },
+    "apimProductSubscriptionName": {
+      "value": "${AZURE_API_MANAGEMENT_PRODUCT_SUBSCRIPTION_NAME=default}"
+    },
+    "apimProductSubscriptionDisplayName": {
+      "value": "${AZURE_API_MANAGEMENT_PRODUCT_SUBSCRIPTION_DISPLAY_NAME='Default Subscription'}"
     }
   }
 }

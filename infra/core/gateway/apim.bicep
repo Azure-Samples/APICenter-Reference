@@ -27,6 +27,31 @@ param skuCount int = 0
 @description('Azure Application Insights Name')
 param applicationInsightsName string
 
+@description('Product name')
+param productName string
+@description('Product display name')
+param productDisplayName string
+@description('Product description')
+param productDescription string
+@description('Product subscription name')
+param productSubscriptionName string
+@description('Product subscription display name')
+param productSubscriptionDisplayName string
+
+@description('APIs to import')
+param apis array = [
+  {
+    name: ''
+    displayName: ''
+    description: ''
+    serviceUrl: ''
+    path: ''
+    subscriptionRequired: true
+    format: 'openapi'
+    value: ''
+  }
+]
+
 resource apimService 'Microsoft.ApiManagement/service@2023-05-01-preview' = {
   name: name
   location: location
@@ -75,5 +100,35 @@ resource apimLogger 'Microsoft.ApiManagement/service/loggers@2023-05-01-preview'
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing = if (!empty(applicationInsightsName)) {
   name: applicationInsightsName
 }
+
+module apimProduct 'apim-product.bicep' = {
+  name: 'apim-product'
+  params: {
+    name: apimService.name
+    productName: productName
+    productDisplayName: productDisplayName
+    productDescription: productDescription
+    productSubscriptionName: productSubscriptionName
+    productSubscriptionDisplayName: productSubscriptionDisplayName
+  }
+}
+
+module apimApis 'apim-api.bicep' = [for api in apis: {
+  name: 'apim-api-${api.name}'
+  params: {
+    name: apimService.name
+    apiName: api.name
+    apiDisplayName: api.displayName
+    apiDescription: api.description
+    apiServiceUrl: api.serviceUrl
+    apiPath: api.path
+    apiSubscriptionRequired: api.subscriptionRequired
+    apiFormat: api.format
+    apiValue: api.value
+  }
+  dependsOn: [
+    apimProduct
+  ]
+}]
 
 output apimServiceName string = apimService.name
