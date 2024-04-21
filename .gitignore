@@ -484,5 +484,6 @@ $RECYCLE.BIN/
 *.swp
 
 # project-specific
+kiota-lock.json
 .DS_Store
 .azure

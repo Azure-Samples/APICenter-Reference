@@ -10,7 +10,7 @@ namespace ApiApp.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds the OpenAPI service.
+    /// Adds the OpenAPI service to the services collection.
     /// </summary>
     /// <param name="services"><see cref="IServiceCollection"/> instance.</param>
     /// <returns>Returns <see cref="IServiceCollection"/> instance.</returns>
@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds the enriched OpenAPI service.
+    /// Adds the enriched OpenAPI service to the services collection.
     /// </summary>
     /// <param name="services"><see cref="IServiceCollection"/> instance.</param>
     /// <returns>Returns <see cref="IServiceCollection"/> instance.</returns>
@@ -55,10 +55,10 @@ public static class ServiceCollectionExtensions
             options.DocumentFilter<OpenApiTagFilter>();
 
             var accessor = services.BuildServiceProvider().GetService<IHttpContextAccessor>();
-            var request = accessor.HttpContext.Request;
+            var request = accessor?.HttpContext?.Request;
             var server = new OpenApiServer
             {
-                Url = $"{request.BaseUrl().TrimEnd('/')}/api",
+                Url = $"{request?.BaseUrl()?.TrimEnd('/')}/api",
             };
             options.AddServer(server);
         });
