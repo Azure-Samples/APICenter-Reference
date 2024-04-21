@@ -29,6 +29,11 @@ param apiCenterName string = '' // Set in main.parameters.json
 })
 param apiCenterLocation string
 
+param logicAppsName string = '' // Set in main.parameters.json
+
+param eventGridTopicName string = '' // Set in main.parameters.json
+param eventGridTopicSubscriptionName string // Set in main.parameters.json
+
 @description('Use Application Insights for monitoring and performance tracing')
 param useApplicationInsights bool = false // Set in main.parameters.json
 
@@ -65,6 +70,12 @@ param apiManagementName string = '' // Set in main.parameters.json
 param apiManagementPublisherName string // Set in main.parameters.json
 param apiManagementPublisherEmail string // Set in main.parameters.json
 
+param apimProductName string // Set in main.parameters.json
+param apimProductDisplayName string // Set in main.parameters.json
+param apimProductDescription string // Set in main.parameters.json
+param apimProductSubscriptionName string // Set in main.parameters.json
+param apimProductSubscriptionDisplayName string // Set in main.parameters.json
+
 var abbrs = loadJsonContent('./abbreviations.json')
 
 // tags that should be applied to all resources.
@@ -93,6 +104,31 @@ module apiCenter './core/gateway/apicenter.bicep' = {
     name: !empty(apiCenterName) ? apiCenterName : 'apic-${resourceToken}'
     location: apiCenterLocation
     tags: tags
+  }
+}
+
+// Provision Logic Apps
+module logicApps './core/integration/logicapps.bicep' = {
+  name: 'logicapps'
+  scope: rg
+  params: {
+    name: !empty(logicAppsName) ? logicAppsName : '${abbrs.logicWorkflows}${resourceToken}-${eventGridTopicSubscriptionName}'
+    location: apiCenterLocation
+    tags: tags
+  }
+}
+
+// Provision Event Grid
+module eventGrid './core/integration/eventgrid.bicep' = {
+  name: 'eventgrid'
+  scope: rg
+  params: {
+    location: apiCenterLocation
+    tags: tags
+    apiCenterName: apiCenter.outputs.name
+    eventGridTopicName: !empty(eventGridTopicName) ? eventGridTopicName : 'evgt-${resourceToken}'
+    eventGridTopicSubscriptionName: eventGridTopicSubscriptionName
+    logicAppName: logicApps.outputs.name
   }
 }
 
@@ -177,6 +213,19 @@ module staticApps './core/host/staticwebapp.bicep' = [for app in apps: {
   }
 }]
 
+var apis = [
+  {
+    name: 'uspto-api'
+    displayName: 'USPTO API'
+    description: 'The Data Set API is accessible via https and http'
+    serviceUrl: 'https://developer.uspto.gov/ds-api'
+    path: 'uspto'
+    subscriptionRequired: true
+    format: 'openapi'
+    value: loadTextContent('./apis/uspto.yaml')
+  }
+]
+
 // Provision API Management
 module apiManagement './core/gateway/apim.bicep' = {
   name: 'apim'
@@ -188,6 +237,12 @@ module apiManagement './core/gateway/apim.bicep' = {
     publisherName: apiManagementPublisherName
     publisherEmail: apiManagementPublisherEmail
     applicationInsightsName: useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
+    productName: apimProductName
+    productDisplayName: apimProductDisplayName
+    productDescription: apimProductDescription
+    productSubscriptionName: apimProductSubscriptionName
+    productSubscriptionDisplayName: apimProductSubscriptionDisplayName
+    apis: apis
   }
 }
 

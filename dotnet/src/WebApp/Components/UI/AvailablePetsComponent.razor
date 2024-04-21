@@ -1,0 +1,32 @@
+﻿@using WebApp.ApiClients
+@using WebApp.ApiClients.Models
+@using WebApp.ApiClients.Pet.FindByStatus
+@inject PetStoreClient PetStore
+
+<h2>Available Pets</h2>
+
+@if (pets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var pet in pets)
+        {
+            <li>@pet.Name</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Pet>? pets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pets = await PetStore.Pet.FindByStatus.GetAsync(p =>
+        {
+            p.QueryParameters.StatusAsGetStatusQueryParameterType = GetStatusQueryParameterType.Available;
+        });
+    }
+}
