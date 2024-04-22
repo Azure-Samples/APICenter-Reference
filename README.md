@@ -39,6 +39,24 @@ Throughout this reference sample, we'd like to give developer experiences how to
     azd up
     ```
 
+## Deploy APICenter Analyzer (Optional)
+
+APICenter Analyzer is a tool to lint API specifications on the server-side. If you want to integrate this server-side linting feature, you can install it by following steps.
+
+1. In a separate directory, clone the APICenter Analyzer repository.
+
+    ```bash
+    azd init --template Azure/APICenter-Analyzer --branch preview
+    ```
+
+1. Provision resources to Azure and deploy the app.
+
+    ```bash
+    azd up
+    ```
+
+   > You will have to provide the API Center instance name and its resource group name for integration.
+
 ## CI/CD Pipelines
 
 As a default, CI/CD pipelines are disabled. To enable CI/CD pipelines, follow these steps.
@@ -88,10 +106,6 @@ TBD
 TBD
 
 ## API Client SDK Integration
-
-TBD
-
-## API Server App Scaffolding
 
 TBD
 
