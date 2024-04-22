@@ -11,12 +11,12 @@
 }
 else
 {
-    <ul>
+    <ol>
         @foreach (var pet in pets)
         {
             <li>@pet.Name</li>
         }
-    </ul>
+    </ol>
 }
 
 @code {
@@ -24,9 +24,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        pets = await PetStore.Pet.FindByStatus.GetAsync(p =>
+        pets = (await PetStore.Pet.FindByStatus.GetAsync(p =>
         {
             p.QueryParameters.StatusAsGetStatusQueryParameterType = GetStatusQueryParameterType.Available;
-        });
+        }))?.Take(10).ToList();
     }
 }

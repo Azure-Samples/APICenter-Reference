@@ -17,10 +17,13 @@ public static class ServiceCollectionExtensions
     /// <returns>Returns <see cref="IServiceCollection"/> instance.</returns>
     public static IServiceCollection AddPetStoreClient(this IServiceCollection services)
     {
-        services.AddScoped<PetStoreClient>(_ =>
+        services.AddScoped<PetStoreClient>(p =>
         {
+            var httpClient = p.GetService<HttpClient>();
+            httpClient.BaseAddress = new Uri("https://petstore3.swagger.io/api/v3");
             var provider = new AnonymousAuthenticationProvider();
-            var adapter = new HttpClientRequestAdapter(provider);
+            var adapter = new HttpClientRequestAdapter(provider, httpClient: httpClient);
+            adapter.BaseUrl = "https://petstore3.swagger.io/api/v3";
             var client = new PetStoreClient(adapter);
 
             return client;

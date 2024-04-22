@@ -1,4 +1,4 @@
-name: Azure Developer CLI
+name: Azure Dev
 
 on:
   workflow_dispatch:
@@ -7,6 +7,10 @@ on:
     # Set this to the mainline branch you are using
     branches:
       - main
+    paths:
+      - 'infra/**'
+      - 'dotnet/**'
+      - 'nodejs/**'
 
 # GitHub Actions workflow to deploy to Azure using azd
 # To configure required secrets for connecting to Azure, simply run `azd pipeline config`
@@ -18,8 +22,44 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-dotnet:
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore NuGet packages
+        shell: bash
+        run: |
+          dotnet restore ./dotnet
+
+      - name: Build .NET Apps
+        shell: bash
+        run: |
+          dotnet build ./dotnet -c Release
+
+      - name: Publish .NET Apps
+        shell: bash
+        run: |
+          dotnet publish ./dotnet/src/ApiApp -c Release -o ./dotnet/publish/ApiApp
+          dotnet publish ./dotnet/src/WebApp -c Release -o ./dotnet/publish/WebApp
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dotnet
+          path: ./dotnet/publish
+
+  deploy-dotnet:
+    runs-on: ubuntu-latest
+    needs:
+      - build-dotnet
 
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
@@ -29,37 +69,49 @@ jobs:
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: dotnet
+          path: ./dotnet/publish
 
-      - name: Install azd
-        uses: Azure/setup-azd@v1.0.0
-
-      - name: Log in with Azure (Federated Credentials)
-        if: ${{ env.AZURE_CLIENT_ID != '' }}
+      - name: Install SWA CLI
+        shell: bash
         run: |
-          azd auth login `
-            --client-id "$Env:AZURE_CLIENT_ID" `
-            --federated-credential-provider "github" `
-            --tenant-id "$Env:AZURE_TENANT_ID"
-        shell: pwsh
+          npm install --global @azure/static-web-apps-cli@latest
 
-      - name: Log in with Azure (Client Credentials)
-        if: ${{ env.AZURE_CREDENTIALS != '' }}
+      - name: Login to Azure
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+
+      - name: Get API app name
+        id: get-apiapp-name
+        shell: bash
         run: |
-          $info = $Env:AZURE_CREDENTIALS | ConvertFrom-Json -AsHashtable;
-          Write-Host "::add-mask::$($info.clientSecret)"
+          export AZURE_WEBAPP_NAME=$(az webapp list -g rg-${{ env.AZURE_ENV_NAME }} --query "[].name | [?contains(@, 'dotnet')]" -o tsv)
+          echo "AZURE_WEBAPP_NAME=$AZURE_WEBAPP_NAME" >> "$GITHUB_OUTPUT"
 
-          azd auth login `
-            --client-id "$($info.clientId)" `
-            --client-secret "$($info.clientSecret)" `
-            --tenant-id "$($info.tenantId)"
-        shell: pwsh
-        env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy to Azure - API app
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ steps.get-apiapp-name.outputs.AZURE_WEBAPP_NAME }}
+          package: ./dotnet/publish/ApiApp
 
-#      - name: Provision Infrastructure
-#        run: azd provision --no-prompt
+      - name: Get Static Web app name
+        id: get-sttapp-name
+        shell: bash
+        run: |
+          export AZURE_STTAPP_NAME=$(az staticwebapp list -g rg-${{ env.AZURE_ENV_NAME }} --query "[].name | [?contains(@, 'dotnet')]" -o tsv)
+          export AZURE_STTAPP_DEPLOYMENT_KEY=$(az staticwebapp secrets list -g rg-${{ env.AZURE_ENV_NAME }} -n $AZURE_STTAPP_NAME --query "properties.apiKey" -o tsv)
 
-      - name: Deploy Application
-        run: azd deploy --no-prompt
+          echo "AZURE_STTAPP_NAME=$AZURE_STTAPP_NAME" >> "$GITHUB_OUTPUT"
+          echo "::add-mask::$AZURE_STTAPP_DEPLOYMENT_KEY"
+          echo "AZURE_STTAPP_DEPLOYMENT_KEY=$AZURE_STTAPP_DEPLOYMENT_KEY" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to Azure - Static Web app
+        shell: bash
+        run: |
+          swa deploy ./dotnet/publish/WebApp/wwwroot --env production --deployment-token ${{ steps.get-sttapp-name.outputs.AZURE_STTAPP_DEPLOYMENT_KEY }}

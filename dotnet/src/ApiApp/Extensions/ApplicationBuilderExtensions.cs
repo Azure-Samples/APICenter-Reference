@@ -22,6 +22,12 @@ public static class ApplicationBuilderExtensions
 
         app.UseHttpsRedirection();
 
+        app.MapGet("/", () =>
+        {
+            return Results.Redirect("/weatherforecast");
+        })
+        .ExcludeFromDescription();
+
         app.MapGet("/weatherforecast", () =>
         {
             var forecast = Enumerable.Range(1, 5).Select(index =>
@@ -62,6 +68,12 @@ public static class ApplicationBuilderExtensions
         }
 
         app.UseHttpsRedirection();
+
+        app.MapGet("/", () =>
+        {
+            return Results.Redirect("/weatherforecast");
+        })
+        .ExcludeFromDescription();
 
         app.MapGet("/weatherforecast", () =>
         {
