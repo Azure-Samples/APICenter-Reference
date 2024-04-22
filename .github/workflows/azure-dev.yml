@@ -57,6 +57,7 @@ jobs:
           path: ./dotnet/publish
 
   deploy-dotnet:
+    if: ${{ vars.AZURE_CLIENT_ID != '' }}
     runs-on: ubuntu-latest
     needs:
       - build-dotnet
