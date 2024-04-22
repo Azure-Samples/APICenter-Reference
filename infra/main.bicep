@@ -107,30 +107,66 @@ module apiCenter './core/gateway/apicenter.bicep' = {
   }
 }
 
+var events = [
+  {
+    name: 'on-api-added-or-updated'
+    subscribedEventTypes: [
+      'Microsoft.ApiCenter.ApiAdded'
+      'Microsoft.ApiCenter.ApiUpdated'
+    ]
+  }
+  {
+    name: 'on-api-version-added-or-updated'
+    subscribedEventTypes: [
+      'Microsoft.ApiCenter.ApiVersionAdded'
+      'Microsoft.ApiCenter.ApiVersionUpdated'
+    ]
+  }
+  {
+    name: 'on-analysis-results-updated'
+    subscribedEventTypes: [
+      'Microsoft.ApiCenter.AnalysisResultsUpdated'
+    ]
+  }
+]
+
 // Provision Logic Apps
-module logicApps './core/integration/logicapps.bicep' = {
-  name: 'logicapps'
+module logicApps './core/integration/logicapps.bicep' = [for event in events:{
+  name: 'logicapps-${event.name}'
   scope: rg
   params: {
-    name: !empty(logicAppsName) ? logicAppsName : '${abbrs.logicWorkflows}${resourceToken}-${eventGridTopicSubscriptionName}'
+    name: !empty(logicAppsName) ? '${logicAppsName}-${event.name}' : '${abbrs.logicWorkflows}${resourceToken}-${event.name}'
     location: apiCenterLocation
     tags: tags
   }
-}
+}]
 
-// Provision Event Grid
-module eventGrid './core/integration/eventgrid.bicep' = {
-  name: 'eventgrid'
+// Provision Event Grid Topic
+module eventGridTopic './core/integration/eventgrid-topic.bicep' = {
+  name: 'eventgrid-topic'
   scope: rg
   params: {
     location: apiCenterLocation
     tags: tags
     apiCenterName: apiCenter.outputs.name
     eventGridTopicName: !empty(eventGridTopicName) ? eventGridTopicName : 'evgt-${resourceToken}'
-    eventGridTopicSubscriptionName: eventGridTopicSubscriptionName
-    logicAppName: logicApps.outputs.name
   }
 }
+
+// Provision Event Grid Subscription
+module eventGridSubscriptions './core/integration/eventgrid-subscription.bicep' = [for event in events:{
+  name: 'eventgrid-subscription-${event.name}'
+  scope: rg
+  dependsOn: [
+    logicApps
+  ]
+  params: {
+    eventGridTopicName: eventGridTopic.outputs.name
+    eventGridTopicSubscriptionName: event.name
+    eventGridTopicSubscriptionIncludedEventTypes: event.subscribedEventTypes
+    logicAppName: !empty(logicAppsName) ? '${logicAppsName}-${event.name}' : '${abbrs.logicWorkflows}${resourceToken}-${event.name}'
+  }
+}]
 
 // Provision monitoring resource with Azure Monitor
 module monitoring './core/monitor/monitoring.bicep' = if (useApplicationInsights) {
