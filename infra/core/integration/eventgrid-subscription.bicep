@@ -1,27 +1,16 @@
-metadata description = 'Creates an Event Grid System Topic and Subscription instance.'
+metadata description = 'Creates an Event Grid Subscription instance.'
 // param name string
-param location string
-param tags object = {}
-
-param apiCenterName string
+// param location string
+// param tags object = {}
 
 param eventGridTopicName string
 param eventGridTopicSubscriptionName string
+param eventGridTopicSubscriptionIncludedEventTypes array = []
 
 param logicAppName string
 
-resource apiCenter 'Microsoft.ApiCenter/services@2024-03-01' existing = {
-  name: apiCenterName
-}
-
-resource eventgridTopic 'Microsoft.EventGrid/systemTopics@2023-12-15-preview' = {
+resource eventgridTopic 'Microsoft.EventGrid/systemTopics@2023-12-15-preview' existing = {
   name: eventGridTopicName
-  location: location
-  tags: tags
-  properties: {
-    source: apiCenter.id
-    topicType: 'microsoft.apicenter.services'
-  }
 }
 
 resource logicApp 'Microsoft.Logic/workflows@2019-05-01' existing = {
@@ -40,9 +29,7 @@ resource eventgridTopicSubscription 'Microsoft.EventGrid/systemTopics/eventSubsc
     }
     eventDeliverySchema: 'EventGridSchema'
     filter: {
-      includedEventTypes: [
-        'Microsoft.ApiCenter.AnalysisResultsUpdated'
-      ]
+      includedEventTypes: eventGridTopicSubscriptionIncludedEventTypes
     }
     labels: []
   }

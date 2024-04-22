@@ -17,9 +17,6 @@
     "eventGridTopicName": {
       "value": "${AZURE_EVENT_GRID_TOPIC}"
     },
-    "eventGridTopicSubscriptionName": {
-      "value": "${AZURE_EVENT_GRID_TOPIC_SUBSCRIPTION=on-analysis-results-updated}"
-    },
     "useApplicationInsights": {
       "value": "${USE_APPLICATION_INSIGHTS=true}"
     },
