@@ -95,6 +95,31 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   tags: tags
 }
 
+var metadataSchema = [
+  {
+    name: 'repository-url'
+    schema: '{ "type": "string", "title": "Repository URL", "description": "The URL that the API application source code is hosted", "format": "uri", "examples": [ "https://github.com/Azure/APICenter-Reference" ] }'
+    assignedTo: [
+      {
+        entity: 'api'
+        required: false
+        deprecated: false
+      }
+    ]
+  }
+  {
+    name: 'compliance-reviewed'
+    schema: '{ "type":"string", "title": "Compliance Reviewed", "description": "Value indicating whether the compliance review has passed or not.", "pattern": "(reviewed|need-for-review)", "format": "regex", "examples": [ "reviewed", "need-for-review" ] }'
+    assignedTo: [
+      {
+        entity: 'api'
+        required: false
+        deprecated: false
+      }
+    ]
+  }
+]
+
 // Provision API Center
 module apiCenter './core/gateway/apicenter.bicep' = {
   name: 'apicenter'
@@ -105,6 +130,17 @@ module apiCenter './core/gateway/apicenter.bicep' = {
     tags: tags
   }
 }
+
+module apiCenterMetadata './core/gateway/apicenter-metadata.bicep' = [for metadata in metadataSchema: {
+  name: 'apicenter-metadata-${metadata.name}'
+  scope: rg
+  params: {
+    apiCenterName: apiCenter.outputs.name
+    apiCenterMetadataSchemaName: metadata.name
+    apiCenterMetadataSchema: metadata.schema
+    apiCenterMetadataSchemaAssignedTo: metadata.assignedTo
+  }
+}]
 
 var events = [
   {
