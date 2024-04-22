@@ -32,7 +32,6 @@ param apiCenterLocation string
 param logicAppsName string = '' // Set in main.parameters.json
 
 param eventGridTopicName string = '' // Set in main.parameters.json
-param eventGridTopicSubscriptionName string // Set in main.parameters.json
 
 @description('Use Application Insights for monitoring and performance tracing')
 param useApplicationInsights bool = false // Set in main.parameters.json
