@@ -5,8 +5,20 @@ on:
     inputs:
       resource-id:
         description: 'The resource ID of the API Center'
-        required: true
-        default: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiCenter/services/{serviceName}/workspaces/{workspaceName}/apis/{apiName}'
+        required: false
+        default: ''
+      resource-group:
+        description: 'The resource group name of the API Center'
+        required: false
+        default: ''
+      api-center-service:
+        description: 'The service name of the API Center'
+        required: false
+        default: ''
+      api-id:
+        description: 'The API ID defined in the API Center'
+        required: false
+        default: ''
       metadata-key:
         description: 'The key of the metadata to set'
         required: true
@@ -33,6 +45,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install APIC extension
+        shell: bash
+        run: |
+          az extension add --name apic-extension --allow-preview true --yes
+
       - name: Login to Azure
         uses: Azure/login@v2
         with:
@@ -44,6 +61,9 @@ jobs:
         shell: pwsh
         run: |
           ./infra/scripts/Set-ApiMetadata.ps1 `
-            -ResourceId "${{ github.event.inputs.resource-id }} `
+            -ResourceId "${{ github.event.inputs.resource-id }}" `
+            -ResourceGroup "${{ github.event.inputs.resource-group }}" `
+            -ApiCenterService "${{ github.event.inputs.api-center-service }}" `
+            -ApiId "${{ github.event.inputs.api-id }}" `
             -MetadataKey "${{ github.event.inputs.metadata-key }}" `
             -MetadataValue "${{ github.event.inputs.metadata-value }}"
