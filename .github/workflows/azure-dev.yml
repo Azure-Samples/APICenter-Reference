@@ -1,3 +1,5 @@
+name: Azure Developer CLI
+
 on:
   workflow_dispatch:
   push:
@@ -18,12 +20,14 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,6 +60,6 @@ jobs:
 
 #      - name: Provision Infrastructure
 #        run: azd provision --no-prompt
-#
-#      - name: Deploy Application
-#        run: azd deploy --no-prompt
+
+      - name: Deploy Application
+        run: azd deploy --no-prompt

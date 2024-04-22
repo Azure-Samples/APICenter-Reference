@@ -1,0 +1,49 @@
+name: Set APIC Metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource-id:
+        description: 'The resource ID of the API Center'
+        required: true
+        default: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiCenter/services/{serviceName}/workspaces/{workspaceName}/apis/{apiName}'
+      metadata-key:
+        description: 'The key of the metadata to set'
+        required: true
+      metadata-value:
+        description: 'The value of the metadata to set'
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  api-metadata:
+    runs-on: ubuntu-latest
+
+    env:
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+
+      - name: Set API Metadata
+        shell: pwsh
+        run: |
+          ./infra/scripts/Set-ApiMetadata.ps1 `
+            -ResourceId "${{ github.event.inputs.resource-id }} `
+            -MetadataKey "${{ github.event.inputs.metadata-key }}" `
+            -MetadataValue "${{ github.event.inputs.metadata-value }}"
