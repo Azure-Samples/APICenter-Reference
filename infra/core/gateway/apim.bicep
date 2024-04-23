@@ -60,6 +60,9 @@ resource apimService 'Microsoft.ApiManagement/service@2023-05-01-preview' = {
     name: sku
     capacity: (sku == 'Consumption') ? 0 : ((sku == 'Developer') ? 1 : skuCount)
   }
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName
@@ -131,4 +134,5 @@ module apimApis 'apim-api.bicep' = [for api in apis: {
   ]
 }]
 
-output apimServiceName string = apimService.name
+output name string = apimService.name
+output identityPrincipalId string = apimService.identity.principalId
