@@ -317,6 +317,25 @@ module apiManagement './core/gateway/apim.bicep' = {
   }
 }
 
+var roleDefinitions = [
+  {
+    id: '71522526-b88f-4d52-b57f-d31fc3546d0d'
+    name: 'API Management Service Reader Role'
+  }
+]
+
+// Assign roles to the API Management service
+module apiManagementRoleAssignments './core/security/apim-role.bicep' = [for role in roleDefinitions: {
+  name: 'apim-role-assignment-${replace(toLower(role.name), ' ', '')}'
+  scope: rg
+  params: {
+    apiManagementName: apiManagement.outputs.name
+    principalType: 'ServicePrincipal'
+    principalId: apiCenter.outputs.identityPrincipalId
+    roleDefinitions: roleDefinitions
+  }
+}]
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 
@@ -332,4 +351,4 @@ output AZURE_STATIC_APP_NODE_URL string = staticApps[0].outputs.uri
 output AZURE_STATIC_APP_DOTNET string = staticApps[1].outputs.name
 output AZURE_STATIC_APP_DOTNET_URL string = staticApps[1].outputs.uri
 
-output AZURE_API_MANAGEMENT string = apiManagement.outputs.apimServiceName
+output AZURE_API_MANAGEMENT string = apiManagement.outputs.name

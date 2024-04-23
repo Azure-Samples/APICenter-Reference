@@ -8,7 +8,11 @@ resource apiCenter 'Microsoft.ApiCenter/services@2024-03-01' = {
   name: name
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
 }
 
 output name string = apiCenter.name
 output id string = apiCenter.id
+output identityPrincipalId string = apiCenter.identity.principalId
