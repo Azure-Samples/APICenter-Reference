@@ -1,4 +1,4 @@
-# Sets the metadata for the API registered on API Center.
+# Registers API to API Center.
 Param(
     [string]
     [Parameter(Mandatory=$false)]
@@ -14,15 +14,7 @@ Param(
 
     [string]
     [Parameter(Mandatory=$false)]
-    $ApiId = "",
-
-    [string]
-    [Parameter(Mandatory=$false)]
-    $MetadataKey = "",
-
-    [string]
-    [Parameter(Mandatory=$false)]
-    $MetadataValue = "",
+    $FileLocation = "",
 
     [string]
     [Parameter(Mandatory=$false)]
@@ -34,15 +26,13 @@ Param(
 )
 
 function Show-Usage {
-    Write-Output "    This updates the metadata value of the API registered on API Center
+    Write-Output "    This registers API to API Center
 
     Usage: $(Split-Path $MyInvocation.ScriptName -Leaf) ``
             [-ResourceId        <Resource ID>] ``
             [-ResourceGroup     <Resource group>] ``
             [-ApiCenterService  <API Center instance name>] ``
-            [-ApiId             <API ID registered to API Center>] ``
-            [-MetadataKey       <Metadata key>] ``
-            [-MetadataValue     <Metadata value>] ``
+            [-FileLocation      <File location to register>] ``
             [-ApiVersion        <API version>] ``
 
             [-Help]
@@ -51,9 +41,7 @@ function Show-Usage {
         -ResourceId         Resource ID. It must be provided unless `ResourceGroup` is provided.
         -ResourceGroup      Resource group. It must be provided unless `ResourceId` is provided.
         -ApiCenterService   API Center instance name. It must be provided unless `ResourceId` is provided.
-        -ApiId              API ID registered to API Center. It must be provided unless `ResourceId` is provided.
-        -MetadataKey        Metadata key.
-        -MetadataValue      Metadata value.
+        -FileLocation       File location to register.
         -ApiVersion         REST API version. Default is `2024-03-01`.
 
         -Help:              Show this message.
@@ -69,12 +57,12 @@ if ($needHelp -eq $true) {
     Exit 0
 }
 
-if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService -eq "" -or $ApiId -eq "")) {
-    Write-Output "`ResourceId` must be provided, or all `ResourceGroup`, `ApiCenterService` and `ApiId` must be provided"
+if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService)) {
+    Write-Output "`ResourceId` must be provided, or both `ResourceGroup` and `ApiCenterService` must be provided"
     Exit 0
 }
-if ($MetadataKey -eq "" -or $MetadataValue -eq "") {
-    Write-Output "Both `MetadataKey` and `MetadataValue` must be provided"
+if ($FileLocation -eq "") {
+    Write-Output "`FileLocation` must be provided"
     Exit 0
 }
 
@@ -85,14 +73,10 @@ if ($ResourceGroup -eq "") {
 if ($ApiCenterService -eq "") {
     $ApiCenterService = $segments[7]
 }
-if ($ApiId -eq "") {
-    $ApiId = $segments[11]
-}
 
-$customProperties = @{ $MetadataKey = $MetadataValue } | ConvertTo-Json -Compress | ConvertTo-Json
+$REPOSITORY_ROOT = git rev-parse --show-toplevel
 
-$updated = az apic api update `
+$registered = az apic api register `
     -g $ResourceGroup `
     -s $ApiCenterService `
-    --api-id $ApiId `
-    --custom-properties $customProperties
+    --api-location "$REPOSITORY_ROOT/$FileLocation"
