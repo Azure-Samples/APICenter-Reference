@@ -57,7 +57,7 @@ if ($needHelp -eq $true) {
     Exit 0
 }
 
-if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService)) {
+if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService -eq "")) {
     Write-Output "`ResourceId` must be provided, or both `ResourceGroup` and `ApiCenterService` must be provided"
     Exit 0
 }
