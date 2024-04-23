@@ -79,4 +79,4 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 $registered = az apic api register `
     -g $ResourceGroup `
     -s $ApiCenterService `
-    --api-location "$REPOSITORY_ROOT/$FileLocation"
+    --api-location "$REPOSITORY_ROOT/$($FileLocation.Replace("\", "/"))"
