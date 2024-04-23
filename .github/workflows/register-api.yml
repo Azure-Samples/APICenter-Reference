@@ -1,0 +1,62 @@
+name: Register API Definition to Azure API Center
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource-id:
+        description: 'The resource ID of the API Center'
+        required: false
+        default: ''
+      resource-group:
+        description: 'The resource group name of the API Center'
+        required: false
+        default: ''
+      api-center-service:
+        description: 'The service name of the API Center'
+        required: false
+        default: ''
+      file-location:
+        description: 'The file path relative to the repository root'
+        required: false
+        default: ''
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  register-api:
+    runs-on: ubuntu-latest
+
+    env:
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install APIC extension
+        shell: bash
+        run: |
+          # az extension add --name apic-extension --allow-preview true --yes
+          az extension add --source ./infra/scripts/apic_extension-1.0.0b4-py3-none-any.whl --allow-preview true --yes
+
+      - name: Login to Azure
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+
+      - name: Register API
+        shell: pwsh
+        run: |
+          ./infra/scripts/New-ApiRegistration.ps1 `
+            -ResourceId "${{ github.event.inputs.resource-id }}" `
+            -ResourceGroup "${{ github.event.inputs.resource-group }}" `
+            -ApiCenterService "${{ github.event.inputs.api-center-service }}" `
+            -FileLocation "${{ github.event.inputs.file-location }}"
