@@ -71,19 +71,55 @@ As a default, CI/CD pipelines are disabled. To enable CI/CD pipelines, follow th
 
 ## API Registration
 
-You can register APIs to API Center in various ways.
-
-### Azure Portal
-
-TBD
+You can register APIs to API Center in various ways. But here, we will show you how to register APIs through Azure CLI and the GitHub Actions workflow.
 
 ### Azure CLI
 
-TBD
+#### From local machine
 
-### Visual Studio Code
+You can register an API to API Center from a local machine, run the following commands:
 
-TBD
+```bash
+# Bash
+RESOURCE_GROUP=<RESOURCE_GROUP>
+API_DOC_FILE_PATH=<API_DOC_FILE_PATH>
+APIC_NAME=<API_CENTER_NAME>
+
+az apic api register -g $RESOURCE_GROUP -s $APIC_NAME --api-location $API_DOC_FILE_PATH
+
+# PowerShell
+$RESOURCE_GROUP = "<RESOURCE_GROUP>"
+$API_DOC_FILE_PATH = "<API_DOC_FILE_PATH>"
+$APIC_NAME = "<API_CENTER_NAME>"
+
+az apic api register -g $RESOURCE_GROUP -s $APIC_NAME --api-location $API_DOC_FILE_PATH
+```
+
+> **NOTE**: Replace `<RESOURCE_GROUP>` `<API_DOC_FILE_PATH>` and `<API_CENTER_NAME>` with your values.
+
+#### From API Management
+
+You can also register APIs to API Center directly importing from API Management. Run the following commands:
+
+```bash
+# Bash
+RESOURCE_GROUP=<RESOURCE_GROUP>
+APIC_NAME=<API_CENTER_NAME>
+APIM_NAME=<API_MANAGEMENT_NAME>
+APIM_ID=$(az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv)
+
+az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
+
+# PowerShell
+$RESOURCE_GROUP = "<RESOURCE_GROUP>"
+$APIC_NAME = "<API_CENTER_NAME>"
+$APIM_NAME = "<API_MANAGEMENT_NAME>"
+$APIM_ID = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv
+
+az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
+```
+
+> **NOTE**: Replace `<RESOURCE_GROUP>` `<APIC_NAME>` and `<APIM_NAME>` with your values.
 
 ### GitHub Actions
 

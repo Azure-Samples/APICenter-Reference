@@ -42,8 +42,7 @@ jobs:
       - name: Install APIC extension
         shell: bash
         run: |
-          # az extension add --name apic-extension --allow-preview true --yes
-          az extension add --source ./infra/scripts/apic_extension-1.0.0b4-py3-none-any.whl --allow-preview true --yes
+          az extension add --name apic-extension --allow-preview true --yes
 
       - name: Login to Azure
         uses: Azure/login@v2
