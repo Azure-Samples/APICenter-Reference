@@ -99,5 +99,5 @@ if ($ApiManagementId -eq "") {
     $registered = az apic service import-from-apim `
     -g $ResourceGroup `
     -s $ApiCenterService `
-    --source-resource-ids "$APIM_ID/apis/uspto-api"
+    --source-resource-ids "$APIM_ID/apis/*"
 }
