@@ -27,13 +27,17 @@ Throughout this reference sample, we'd like to give developer experiences how to
 
 1. Fork this repository.
 1. Clone the forked repository to your local machine.
-1. Login to Azure Developer CLI.
+1. Log in with the following command. Then, you will be able to use the `azd` cli to quickly provision and deploy the application.
 
     ```bash
+    # Authenticate with Azure Developer CLI
     azd auth login
+    
+    # Authenticate with Azure CLI
+    az login
     ```
 
-1. Provision all resources to Azure and deploy all the apps to those resources.
+1. Run `azd up` to provision all the resources to Azure and deploy the code to those resources.
 
     ```bash
     azd up
@@ -59,15 +63,28 @@ APICenter Analyzer is a tool to lint API specifications on the server-side. If y
 
 ## CI/CD Pipelines
 
-As a default, CI/CD pipelines are disabled. To enable CI/CD pipelines, follow these steps.
+If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the following command to create a GitHub repository and push the code to the repository.
 
-1. Configure the CI/CD pipeline.
+1. First of all, log in to GitHub.
 
     ```bash
-    azd pipeline config
+    # Authenticate with GitHub CLI
+    gh auth login
     ```
 
-1. Push your changes to the repository.
+1. Run the following commands to update your GitHub repository variables.
+
+    ```bash
+    # Bash
+    AZURE_CLIENT_ID=$(./infra/scripts/get-azdvariable.sh --key AZURE_CLIENT_ID)
+    azd pipeline config --principal-id $AZURE_CLIENT_ID
+    
+    # PowerShell
+    $AZURE_CLIENT_ID = $(./infra/scripts/Get-AzdVariable.ps1 -Key AZURE_CLIENT_ID)
+    azd pipeline config --principal-id $AZURE_CLIENT_ID
+    ```
+
+1. Now, you're good to go! Push the code to the GitHub repository or manually run the GitHub Actions workflow to get your portal deployed.
 
 ## API Registration
 
