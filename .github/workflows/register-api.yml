@@ -19,6 +19,10 @@ on:
         description: 'The file path relative to the repository root'
         required: false
         default: ''
+      api-management-id:
+        description: 'The resource ID of the API Management service'
+        required: false
+        default: ''
 
 permissions:
   id-token: write
@@ -32,8 +36,8 @@ jobs:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      # AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+      # AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
 
     steps:
       - name: Checkout
@@ -42,8 +46,7 @@ jobs:
       - name: Install APIC extension
         shell: bash
         run: |
-          # az extension add --name apic-extension --allow-preview true --yes
-          az extension add --source ./infra/scripts/apic_extension-1.0.0b4-py3-none-any.whl --allow-preview true --yes
+          az extension add --name apic-extension --allow-preview true --yes
 
       - name: Login to Azure
         uses: Azure/login@v2
@@ -59,4 +62,5 @@ jobs:
             -ResourceId "${{ github.event.inputs.resource-id }}" `
             -ResourceGroup "${{ github.event.inputs.resource-group }}" `
             -ApiCenterService "${{ github.event.inputs.api-center-service }}" `
-            -FileLocation "${{ github.event.inputs.file-location }}"
+            -FileLocation "${{ github.event.inputs.file-location }}" `
+            -ApiManagementId ${{ github.event.inputs.api-management-id }} `
