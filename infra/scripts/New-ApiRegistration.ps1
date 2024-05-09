@@ -67,11 +67,11 @@ if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService -eq "
     Write-Host "`ResourceId` must be provided, or both `ResourceGroup` and `ApiCenterService` must be provided"
     Exit 0
 }
-if ($FileLocation -eq "" -and $ApiManagementId -eq "") {
+if (($FileLocation -eq "") -and ($ApiManagementId -eq "")) {
     Write-Host "`FileLocation` must be provided"
     Exit 0
 }
-if ($ApiManagementId -notlike "/subscriptions/*") {
+if (($FileLocation -eq "") -and ($ApiManagementId -notlike "/subscriptions/*")) {
     Write-Host "`ApiManagementId` must be a valid resource ID"
     Exit 0
 }
@@ -99,5 +99,5 @@ if ($ApiManagementId -eq "") {
     $registered = az apic service import-from-apim `
     -g $ResourceGroup `
     -s $ApiCenterService `
-    --source-resource-ids "$APIM_ID/apis/*"
+    --source-resource-ids "$ApiManagementId/apis/*"
 }
