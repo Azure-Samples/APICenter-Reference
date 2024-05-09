@@ -22,6 +22,7 @@ var diagnosticLogCategoriesToEnable = kind == 'functionapp'
       'AppServiceAuditLogs'
       'AppServiceIPSecAuditLogs'
       'AppServicePlatformLogs'
+      'AppServiceAuthenticationLogs'
     ]
 
 var diagnosticMetricsToEnable = [
