@@ -39,6 +39,7 @@ param useApplicationInsights bool = false // Set in main.parameters.json
 param logAnalyticsName string = '' // Set in main.parameters.json
 param applicationInsightsName string = '' // Set in main.parameters.json
 param applicationInsightsDashboardName string = '' // Set in main.parameters.json
+param diagnosticsSettingsName string = ''
 
 param appServicePlanName string = '' // Set in main.parameters.json
 param appServiceSkuName string // Set in main.parameters.json
@@ -266,6 +267,18 @@ module appServices './core/host/appservice.bicep' = [for app in apps: {
     appSettings: {
       APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? monitoring.outputs.applicationInsightsConnectionString : ''
     }
+  }
+}]
+
+// Integrate Diagnostics settings
+module diagnostics './core/monitor/appservice-diagnosticsettings.bicep' = [for (app, i) in apps: if (useApplicationInsights) {
+  name: 'diagnostics-${app.name}'
+  scope: rg
+  params: {
+    name: !empty(diagnosticsSettingsName) ? '${diagnosticsSettingsName}-${app.name}' : 'diag-${resourceToken}-${app.name}'
+    logAnalyticsName: monitoring.outputs.logAnalyticsWorkspaceName
+    appServiceName: appServices[i].outputs.name
+    kind: 'appservice'
   }
 }]
 

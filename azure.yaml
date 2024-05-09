@@ -2,22 +2,87 @@
 
 name: apicenter-reference
 
-# services:
-#   appservice-dotnet:
-#     host: appservice
-#     language: dotnet
-#     project: ./dotnet/src/ApiApp
+workflows:
+  up: 
+    steps:
+      - azd: provision
+      - azd: package
+      - azd: deploy
+
+services:
+  appservice-dotnet:
+    host: appservice
+    language: csharp
+    project: ./dotnet/src/ApiApp
 #   appservice-node:
 #     host: appservice
 #     language: js
 #     project: ./nodejs/src/api
-#   staticapp-dotnet:
-#     host: staticwebapp
-#     language: dotnet
-#     project: ./dotnet/src/WebApp
-#     dist: wwwroot
+  staticapp-dotnet:
+    host: staticwebapp
+    language: csharp
+    project: ./dotnet/src/WebApp
+    dist: ./dotnet/publish/wwwroot
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release -o ./dotnet/publish
+        windows:
+          shell: pwsh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release -o ./dotnet/publish
 #   staticapp-node:
 #     host: staticwebapp
 #     language: js
 #     project: ./nodejs/src/web
 #     dist: build
+
+hooks:
+  preup:
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/preup.sh
+    windows:
+      shell: pwsh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/preup.ps1
+  preprovision:
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/preprovision.sh
+    windows:
+      shell: pwsh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/preprovision.ps1
+  postprovision:
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/postprovision.sh
+    windows:
+      shell: pwsh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/postprovision.ps1
+  predown:
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/predown.sh
+    windows:
+      shell: pwsh
+      continueOnError: false
+      interactive: true
+      run: infra/hooks/predown.ps1
