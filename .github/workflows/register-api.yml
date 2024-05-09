@@ -63,4 +63,4 @@ jobs:
             -ResourceGroup "${{ github.event.inputs.resource-group }}" `
             -ApiCenterService "${{ github.event.inputs.api-center-service }}" `
             -FileLocation "${{ github.event.inputs.file-location }}" `
-            -ApiManagementId ${{ github.event.inputs.api-management-id }} `
+            -ApiManagementId "${{ github.event.inputs.api-management-id }}" `
