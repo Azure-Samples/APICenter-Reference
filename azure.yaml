@@ -46,36 +46,36 @@ hooks:
   preup:
     posix:
       shell: sh
-      run: infra/hooks/preup.sh
       continueOnError: false
       interactive: true
+      run: infra/hooks/preup.sh
     windows:
       shell: pwsh
-      run: infra/hooks/preup.ps1
       continueOnError: false
       interactive: true
+      run: infra/hooks/preup.ps1
   preprovision:
     posix:
       shell: sh
-      run: infra/hooks/preprovision.sh
       continueOnError: false
       interactive: true
+      run: infra/hooks/preprovision.sh
     windows:
       shell: pwsh
-      run: infra/hooks/preprovision.ps1
       continueOnError: false
       interactive: true
+      run: infra/hooks/preprovision.ps1
   postprovision:
     posix:
       shell: sh
-      run: infra/hooks/postprovision.sh
       continueOnError: false
       interactive: true
+      run: infra/hooks/postprovision.sh
     windows:
       shell: pwsh
-      run: infra/hooks/postprovision.ps1
       continueOnError: false
       interactive: true
+      run: infra/hooks/postprovision.ps1
   predown:
     posix:
       shell: sh
