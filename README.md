@@ -119,21 +119,19 @@ Alternatively, you can run the following script pre-written:
 ```bash
 # Bash
 RESOURCE_GROUP=<RESOURCE_GROUP>
-APIC_NAME=<API_CENTER_NAME>
 API_DOC_FILE_PATH=<API_DOC_FILE_PATH>
 
-RESOURCE_ID=$(az apic service show -g $RESOURCE_GROUP -s $APIC_NAME --query "id" -o tsv)
+RESOURCE_ID=$(az resource list --namespace "Microsoft.ApiCenter" --resource-type "services" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 
 ./infra/scripts/new-apiregistration.sh --resource-id $RESOURCE_ID --file-location $API_DOC_FILE_PATH
 
 # PowerShell
 $RESOURCE_GROUP = "<RESOURCE_GROUP>"
-$APIC_NAME = "<API_CENTER_NAME>"
 $API_DOC_FILE_PATH = "<API_DOC_FILE_PATH>"
 
-$RESOURCE_ID = $(az apic service show -g $RESOURCE_GROUP -s $APIC_NAME --query "id" -o tsv)
+$RESOURCE_ID = $(az resource list --namespace "Microsoft.ApiCenter" --resource-type "services" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 
-./infra/scripts/New-ApiRegistration.sh -ResourceId $RESOURCE_ID -FileLocation $API_DOC_FILE_PATH
+./infra/scripts/New-ApiRegistration.ps1 -ResourceId $RESOURCE_ID -FileLocation $API_DOC_FILE_PATH
 ```
 
 > **NOTE**: Replace `<RESOURCE_GROUP>`, `<API_CENTER_NAME>` and `<API_DOC_FILE_PATH>` with your values.
@@ -146,7 +144,6 @@ You can also register APIs to API Center directly importing from API Management.
 # Bash
 RESOURCE_GROUP=<RESOURCE_GROUP>
 APIC_NAME=<API_CENTER_NAME>
-APIM_NAME=<API_MANAGEMENT_NAME>
 APIM_ID=$(az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 
 az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
@@ -154,7 +151,7 @@ az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resou
 # PowerShell
 $RESOURCE_GROUP = "<RESOURCE_GROUP>"
 $APIC_NAME = "<API_CENTER_NAME>"
-$APIM_NAME = "<API_MANAGEMENT_NAME>"
+
 $APIM_ID = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv
 
 az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
@@ -179,14 +176,55 @@ $RESOURCE_GROUP = "<RESOURCE_GROUP>"
 $APIC_ID = $(az resource list --namespace "Microsoft.ApiCenter" --resource-type "services" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 $APIM_ID = $(az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 
-./infra/scripts/New-ApiRegistration.sh -ResourceId $APIC_ID -ApiManagementId $APIM_ID
+./infra/scripts/New-ApiRegistration.ps1 -ResourceId $APIC_ID -ApiManagementId $APIM_ID
 ```
 
 > **NOTE**: Replace `<RESOURCE_GROUP>` with your values.
 
 ### Through GitHub Actions Workflow
 
-TBD
+You can also register APIs through GitHub Actions workflow.
+
+![Register API through GitHub Actions workflow](./images/register-api-01.png)
+
+1. Click the `Actions` tab in your GitHub repository and select the `Register API` workflow.
+1. Enter the information with following combinations:
+   - API Center resource ID and file path
+     - `The resource ID of the API Center`:
+
+       👉 eg. `/subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.ApiCenter/services/<api_center_name>`
+     - `The file path relative to the repository root`:
+
+       👉 eg. `infra/apis/petstore.yaml`
+   - API Center resource ID and API Management resource ID
+     - `The resource ID of the API Center`:
+
+       👉 eg. `/subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.ApiCenter/services/<api_center_name>`
+     - `The resource ID of the API Management service`:
+
+       👉 eg. `/subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.ApiManagement/service/<api_management_name>`
+   - API Center resource group, name and file path
+     - `The resource group name of the API Center`:
+
+       👉 `<resource_group>`
+     - `The service name of the API Center`:
+
+       👉 `<api_center_name>`
+     - `The file path relative to the repository root`:
+
+       👉 eg. `infra/apis/petstore.yaml`
+   - API Center resource group, name and API Management resource ID
+     - `The resource group name of the API Center`:
+
+       👉 `<resource_group>`
+     - `The service name of the API Center`:
+
+       👉 `<api_center_name>`
+     - `The resource ID of the API Management service`:
+
+       👉 eg. `/subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.ApiManagement/service/<api_management_name>`
+1. Click the `Run workflow` button.
+1. Check API Center to see if the API is registered successfully.
 
 ## Custom Metadata Management
 
