@@ -44,7 +44,6 @@ then
     requiredResourceAccess="[{\"resourceAppId\": \"c3ca1a77-7a87-4dba-b8f8-eea115ae4573\", \"resourceAccess\": [{\"type\": \"Scope\", \"id\": \"44327351-3395-414e-882e-7aa4a9c3b25d\"}]}]"
 
     payload=$(jq -n \
-    --argjson spa "$spa" \
     --argjson requiredResourceAccess "$requiredResourceAccess" \
     "{\"requiredResourceAccess\": $requiredResourceAccess}")
 

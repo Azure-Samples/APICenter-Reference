@@ -35,7 +35,6 @@ services:
           continueOnError: false
           interactive: true
           run: dotnet publish -c Release -o ./dotnet/publish
-
 #   staticapp-node:
 #     host: staticwebapp
 #     language: js
