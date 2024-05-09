@@ -94,7 +94,7 @@ if [ -z "$FILE_LOCATION" ] && [ -z "$API_MANAGEMENT_ID" ] ; then
     echo "'file-lcation' must be provided"
     exit 0
 fi
-if [[ "$API_MANAGEMENT_ID" != /subscriptions/* ]] ; then
+if [ -z "$FILE_LOCATION" ] && [[ "$API_MANAGEMENT_ID" != /subscriptions/* ]] ; then
     echo "'api-management-id' must be a valid resource ID"
     exit 0
 fi

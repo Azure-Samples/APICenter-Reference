@@ -1,4 +1,4 @@
-name: Register API Definition to Azure API Center
+name: Register API
 
 on:
   workflow_dispatch:
