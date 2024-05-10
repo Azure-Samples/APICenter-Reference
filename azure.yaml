@@ -14,6 +14,18 @@ services:
     host: appservice
     language: csharp
     project: ./dotnet/src/ApiApp
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release
+        windows:
+          shell: pwsh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release
 #   appservice-node:
 #     host: appservice
 #     language: js
