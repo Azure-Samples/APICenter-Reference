@@ -240,7 +240,7 @@ RESOURCE_GROUP=<RESOURCE_GROUP>
 APIC_NAME=<API_CENTER_NAME>
 API_ID=<API_ID>
 METADATA_KEY=compliance-reviewed
-METADATA_VALUE=reviewed
+METADATA_VALUE=need-for-review
 
 CUSTOM_PROPERTIES=$(echo "{\"$METADATA_KEY\":\"$METADATA_VALUE\"}" | jq -c .)
 
@@ -251,7 +251,7 @@ $RESOURCE_GROUP = "<RESOURCE_GROUP>"
 $APIC_NAME = "<API_CENTER_NAME>"
 $API_ID = "<API_ID>"
 $METADATA_KEY = "compliance-reviewed"
-$METADATA_VALUE = "reviewed"
+$METADATA_VALUE = "need-for-review"
 
 $CUSTOM_PROPERTIES = @{ $METADATA_KEY = $METADATA_VALUE } | ConvertTo-Json -Compress | ConvertTo-Json
 

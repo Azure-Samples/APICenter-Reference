@@ -90,7 +90,10 @@ if ($ServiceName -eq "") {
     $ServiceName = $segments[7]
 }
 
-$customProperties = @{ $MetadataKey = $MetadataValue } | ConvertTo-Json -Compress | ConvertTo-Json
+$customProperties = @{ $MetadataKey = $MetadataValue } | ConvertTo-Json -Compress
+if ($IsWindows) {
+    $customProperties = $customProperties | ConvertTo-Json
+}
 
 $updated = az apic api update `
     -g $ResourceGroup `

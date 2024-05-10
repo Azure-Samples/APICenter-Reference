@@ -34,19 +34,19 @@ services:
     host: staticwebapp
     language: csharp
     project: ./dotnet/src/WebApp
-    dist: ./dotnet/publish/webapp/wwwroot
+    dist: ./dotnet/publish/wwwroot
     hooks:
       prepackage:
         posix:
           shell: sh
           continueOnError: false
           interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish/webapp
+          run: dotnet publish -c Release -o ./dotnet/publish
         windows:
           shell: pwsh
           continueOnError: false
           interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish/webapp
+          run: dotnet publish -c Release -o ./dotnet/publish
 #   staticapp-node:
 #     host: staticwebapp
 #     language: js
