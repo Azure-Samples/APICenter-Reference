@@ -7,7 +7,7 @@ set -e
 function usage() {
     cat <<USAGE
 
-    Usage: $0 [--resource-id] [-g|--resource-group] [-n|-s|--api-center-service] [-f|--file-location] [--api-management-id] [--api-version] [-h|--help]
+    Usage: $0 [--resource-id] [-g|--resource-group] [-s|-n|--service|--name|--service-name] [-f|--file-location] [--api-management-id] [--api-version] [-h|--help]
 
     Options:
         --resource-id               Resource ID. It must be provided unless 'resource-group' is provided.
@@ -26,7 +26,7 @@ USAGE
 
 RESOURCE_ID=
 RESOURCE_GROUP=
-API_CENTER_SERVICE=
+SERVICE_NAME=
 FILE_LOCATION=
 API_MANAGEMENT_ID=
 API_VERSION="2024-03-01"
@@ -34,7 +34,7 @@ API_VERSION="2024-03-01"
 if [[ $# -eq 0 ]]; then
     RESOURCE_ID=
     RESOURCE_GROUP=
-    API_CENTER_SERVICE=
+    SERVICE_NAME=
     FILE_LOCATION=
     API_MANAGEMENT_ID=
     API_VERSION="2024-03-01"
@@ -52,9 +52,9 @@ while [[ "$1" != "" ]]; do
             RESOURCE_GROUP="$1"
         ;;
 
-        -n | -s | --api-center-service)
+        -s | -n | --service | --name | --api-center-service)
             shift
-            API_CENTER_SERVICE="$1"
+            SERVICE_NAME="$1"
         ;;
 
         -f | --file-location)
@@ -86,8 +86,8 @@ while [[ "$1" != "" ]]; do
     shift
 done
 
-if [ -z "$RESOURCE_ID" ] && [ -z "$RESOURCE_GROUP" -o -z "$API_CENTER_SERVICE" ] ; then
-    echo "'resource-id' must be provided, or both 'resource-group' and 'api-center-service' must be provided"
+if [ -z "$RESOURCE_ID" ] && [ -z "$RESOURCE_GROUP" -o -z "$SERVICE_NAME" ] ; then
+    echo "'resource-id' must be provided, or both 'resource-group' and 'service-name' must be provided"
     exit 0
 fi
 if [ -z "$FILE_LOCATION" ] && [ -z "$API_MANAGEMENT_ID" ] ; then
@@ -103,8 +103,8 @@ IFS='/' read -ra SEGMENTS <<< "$RESOURCE_ID"
 if [ -z "$RESOURCE_GROUP" ] ; then
     RESOURCE_GROUP=${SEGMENTS[4]}
 fi
-if [ -z "$API_CENTER_SERVICE" ] ; then
-    API_CENTER_SERVICE=${SEGMENTS[8]}
+if [ -z "$SERVICE_NAME" ] ; then
+    SERVICE_NAME=${SEGMENTS[8]}
 fi
 
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
@@ -114,13 +114,13 @@ if [ -z "$API_MANAGEMENT_ID" ] ; then
 
     registered=$(az apic api register \
     -g $RESOURCE_GROUP \
-    -s $API_CENTER_SERVICE \
+    -s $SERVICE_NAME \
     --api-location "$REPOSITORY_ROOT/$FILE_LOCATION")
 else
     echo "Registering API from API Management: $API_MANAGEMENT_ID ..."
 
     registered=$(az apic service import-from-apim \
     -g $RESOURCE_GROUP \
-    -s $API_CENTER_SERVICE \
+    -s $SERVICE_NAME \
     --source-resource-ids "$API_MANAGEMENT_ID/apis/*")
 fi

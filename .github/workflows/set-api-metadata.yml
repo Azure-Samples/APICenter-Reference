@@ -11,12 +11,12 @@ on:
         description: 'The resource group name of the API Center'
         required: false
         default: ''
-      api-center-service:
+      service-name:
         description: 'The service name of the API Center'
         required: false
         default: ''
       api-id:
-        description: 'The API ID defined in the API Center'
+        description: 'The API ID registered in the API Center'
         required: false
         default: ''
       metadata-key:
@@ -38,8 +38,6 @@ jobs:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
 
     steps:
       - name: Checkout
@@ -58,12 +56,12 @@ jobs:
           tenant-id: ${{ env.AZURE_TENANT_ID }}
 
       - name: Set API Metadata
-        shell: pwsh
+        shell: bash
         run: |
-          ./infra/scripts/Set-ApiMetadata.ps1 `
-            -ResourceId "${{ github.event.inputs.resource-id }}" `
-            -ResourceGroup "${{ github.event.inputs.resource-group }}" `
-            -ApiCenterService "${{ github.event.inputs.api-center-service }}" `
-            -ApiId "${{ github.event.inputs.api-id }}" `
-            -MetadataKey "${{ github.event.inputs.metadata-key }}" `
-            -MetadataValue "${{ github.event.inputs.metadata-value }}"
+          ./infra/scripts/set-apimetadata.sh \
+            --resource-id "${{ github.event.inputs.resource-id }}" \
+            --resource-group "${{ github.event.inputs.resource-group }}" \
+            --service-name "${{ github.event.inputs.service-name }}" \
+            --api-id "${{ github.event.inputs.api-id }}" \
+            --metadata-key "${{ github.event.inputs.metadata-key }}" \
+            --metadata-value "${{ github.event.inputs.metadata-value }}"

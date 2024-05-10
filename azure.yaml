@@ -14,6 +14,18 @@ services:
     host: appservice
     language: csharp
     project: ./dotnet/src/ApiApp
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release
+        windows:
+          shell: pwsh
+          continueOnError: false
+          interactive: true
+          run: dotnet publish -c Release
 #   appservice-node:
 #     host: appservice
 #     language: js
@@ -22,19 +34,19 @@ services:
     host: staticwebapp
     language: csharp
     project: ./dotnet/src/WebApp
-    dist: ./dotnet/publish/wwwroot
+    dist: ./dotnet/publish/webapp/wwwroot
     hooks:
       prepackage:
         posix:
           shell: sh
           continueOnError: false
           interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
+          run: dotnet publish -c Release -o ./dotnet/publish/webapp
         windows:
           shell: pwsh
           continueOnError: false
           interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
+          run: dotnet publish -c Release -o ./dotnet/publish/webapp
 #   staticapp-node:
 #     host: staticwebapp
 #     language: js

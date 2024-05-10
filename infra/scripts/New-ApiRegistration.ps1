@@ -10,7 +10,7 @@ Param(
 
     [string]
     [Parameter(Mandatory=$false)]
-    $ApiCenterService = "",
+    $ServiceName = "",
 
     [string]
     [Parameter(Mandatory=$false)]
@@ -35,7 +35,7 @@ function Show-Usage {
     Usage: $(Split-Path $MyInvocation.ScriptName -Leaf) ``
             [-ResourceId        <Resource ID>] ``
             [-ResourceGroup     <Resource group>] ``
-            [-ApiCenterService  <API Center instance name>] ``
+            [-ServiceName  <API Center instance name>] ``
             [-FileLocation      <File location to register>] ``
             [-ApiManagementId   <File location to register>] ``
             [-ApiVersion        <API version>] ``
@@ -45,7 +45,7 @@ function Show-Usage {
     Options:
         -ResourceId         Resource ID. It must be provided unless `ResourceGroup` is provided.
         -ResourceGroup      Resource group. It must be provided unless `ResourceId` is provided.
-        -ApiCenterService   API Center instance name. It must be provided unless `ResourceId` is provided.
+        -ServiceName        API Center instance name. It must be provided unless `ResourceId` is provided.
         -FileLocation       File location to register.
         -ApiManagementId    API Management resource ID. If provided, ``FileLocation`` will be ignored.
         -ApiVersion         REST API version. Default is `2024-03-01`.
@@ -63,16 +63,16 @@ if ($needHelp -eq $true) {
     Exit 0
 }
 
-if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ApiCenterService -eq "")) {
-    Write-Host "`ResourceId` must be provided, or both `ResourceGroup` and `ApiCenterService` must be provided"
+if (($ResourceId -eq "") -and ($ResourceGroup -eq "" -or $ServiceName -eq "")) {
+    Write-Host "``ResourceId`` must be provided, or both ``ResourceGroup`` and ``ServiceName`` must be provided"
     Exit 0
 }
 if (($FileLocation -eq "") -and ($ApiManagementId -eq "")) {
-    Write-Host "`FileLocation` must be provided"
+    Write-Host "``FileLocation`` must be provided"
     Exit 0
 }
 if (($FileLocation -eq "") -and ($ApiManagementId -notlike "/subscriptions/*")) {
-    Write-Host "`ApiManagementId` must be a valid resource ID"
+    Write-Host "``ApiManagementId`` must be a valid resource ID"
     Exit 0
 }
 
@@ -80,8 +80,8 @@ $segments = $ResourceId.Split("/", [System.StringSplitOptions]::RemoveEmptyEntri
 if ($ResourceGroup -eq "") {
     $ResourceGroup = $segments[3]
 }
-if ($ApiCenterService -eq "") {
-    $ApiCenterService = $segments[7]
+if ($ServiceName -eq "") {
+    $ServiceName = $segments[7]
 }
 
 $REPOSITORY_ROOT = git rev-parse --show-toplevel
@@ -91,13 +91,13 @@ if ($ApiManagementId -eq "") {
 
     $registered = az apic api register `
     -g $ResourceGroup `
-    -s $ApiCenterService `
+    -s $ServiceName `
     --api-location "$REPOSITORY_ROOT/$($FileLocation.Replace("\", "/"))"
 } else {
     Write-Host "Registering API from API Management: $ApiManagementId ..."
 
     $registered = az apic service import-from-apim `
     -g $ResourceGroup `
-    -s $ApiCenterService `
+    -s $ServiceName `
     --source-resource-ids "$ApiManagementId/apis/*"
 }
