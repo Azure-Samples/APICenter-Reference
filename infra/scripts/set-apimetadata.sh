@@ -57,7 +57,7 @@ while [[ "$1" != "" ]]; do
             RESOURCE_GROUP="$1"
         ;;
 
-        -s | -n | --service | --name | --api-center-service)
+        -s | -n | --service | --name | --service-name)
             shift
             SERVICE_NAME="$1"
         ;;

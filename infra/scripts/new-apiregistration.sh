@@ -10,14 +10,14 @@ function usage() {
     Usage: $0 [--resource-id] [-g|--resource-group] [-s|-n|--service|--name|--service-name] [-f|--file-location] [--api-management-id] [--api-version] [-h|--help]
 
     Options:
-        --resource-id               Resource ID. It must be provided unless 'resource-group' is provided.
-        -g|--resource-group         Resource group. It must be provided unless 'resource-id' is provided.
-        -n|-s|--api-center-service  API Center instance name. It must be provided unless 'resource-id' is provided.
-        -f|--file-location          File location to register.
-        --api-management-id         API Management resource ID. If provided, 'FileLocation' will be ignored.
-        --api-version               REST API version. Default is '2024-03-01'.
+        --resource-id                           Resource ID. It must be provided unless 'resource-group' is provided.
+        -g|--resource-group                     Resource group. It must be provided unless 'resource-id' is provided.
+        -s|-n|--service|--name|--service-name   API Center instance name. It must be provided unless 'resource-id' is provided.
+        -f|--file-location                      File location to register.
+        --api-management-id                     API Management resource ID. If provided, 'FileLocation' will be ignored.
+        --api-version                           REST API version. Default is '2024-03-01'.
 
-        -h|--help:                  Show this message.
+        -h|--help:                              Show this message.
 
 USAGE
 
@@ -52,7 +52,7 @@ while [[ "$1" != "" ]]; do
             RESOURCE_GROUP="$1"
         ;;
 
-        -s | -n | --service | --name | --api-center-service)
+        -s | -n | --service | --name | --service-name)
             shift
             SERVICE_NAME="$1"
         ;;

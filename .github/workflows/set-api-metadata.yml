@@ -1,4 +1,4 @@
-name: Set APIC Metadata
+name: Set Custom Metadata
 
 on:
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
           tenant-id: ${{ env.AZURE_TENANT_ID }}
 
-      - name: Set API Metadata
+      - name: Set Custom Metadata
         shell: bash
         run: |
           ./infra/scripts/set-apimetadata.sh \
