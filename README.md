@@ -17,18 +17,18 @@ Throughout this reference sample, we'd like to give developer experiences how to
 
 ## Prerequisites
 
-- Azure Subscription
-- Visual Studio Code with API Center extension
-- Azure Developer CLI
-- Azure CLI with API Center extension
-- GitHub CLI
+- [Azure Subscription](https://azure.microsoft.com/free/?WT.mc_id=dotnet-134184-juyoo)
+- [Visual Studio Code](https://code.visualstudio.com/) with [API Center extension](https://marketplace.visualstudio.com/items?itemName=apidev.azure-api-center)
+- [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?WT.mc_id=dotnet-134184-juyoo)
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli?WT.mc_id=dotnet-134184-juyoo) with [API Center extension](https://learn.microsoft.com/cli/azure/azure-cli-extensions-list?WT.mc_id=dotnet-134184-juyoo)
+- [GitHub CLI](https://cli.github.com)
 
 ## Getting Started
 
 Provisioning and deploying all the resources are as easy as running a few commands. Follow the steps below to get started.
 
 1. Fork this repository.
-1. Clone the forked repository to your local machine.
+1. Clone the forked repository to your local machine or [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/APICenter-Reference)
 1. Log in with the following command. Then, you will be able to use the `azd` cli to quickly provision and deploy the application.
 
     ```bash
