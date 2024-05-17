@@ -6,8 +6,8 @@ workflows:
   up: 
     steps:
       - azd: provision
-      - azd: package
-      - azd: deploy
+      - azd: package --all
+      - azd: deploy --all
 
 services:
   appservice-dotnet:
