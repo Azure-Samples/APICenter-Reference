@@ -21,11 +21,11 @@ USAGE
 }
 
 SOURCE="dotnet/src/WebApp.Extensions/*"
-TARGET="dotnet/src/WebApp"
+TARGET="dotnet/src/WebApp/"
 
 if [[ $# -eq 0 ]]; then
     SOURCE="dotnet/src/WebApp.Extensions/*"
-    TARGET="dotnet/src/WebApp"
+    TARGET="dotnet/src/WebApp/"
 fi
 
 while [[ "$1" != "" ]]; do
@@ -67,4 +67,4 @@ fi
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 
 # Copy files
-cp -R "$REPOSITORY_ROOT/$SOURCE" "$REPOSITORY_ROOT/$TARGET"
+cp -r $REPOSITORY_ROOT/$SOURCE $REPOSITORY_ROOT/$TARGET
