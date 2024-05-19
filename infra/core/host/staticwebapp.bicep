@@ -25,4 +25,5 @@ resource web 'Microsoft.Web/staticSites@2022-09-01' = {
 }
 
 output name string = web.name
+output location string = replace(toLower(web.location), ' ', '')
 output uri string = 'https://${web.properties.defaultHostname}'

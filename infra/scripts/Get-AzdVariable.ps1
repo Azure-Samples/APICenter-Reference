@@ -50,7 +50,7 @@ pwsh -Command {
     )
 
     # Load the azd environment variables
-    & "$RepositoryRoot/infra/hooks/load_azd_env.ps1"
+    & "$REPOSITORY_ROOT/infra/hooks/load_azd_env.ps1"
 
     $envs = Get-ChildItem -Path env:
 
