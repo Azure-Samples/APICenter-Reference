@@ -56,21 +56,26 @@ You will see the API registered in API Center.
 
 You can also register APIs to API Center directly importing from API Management. Run the following commands:
 
+> The API Management instance already has the USPTO API registered. We will import the API from API Management to API Center.
+
 ```bash
 # Bash
 RESOURCE_GROUP=<RESOURCE_GROUP>
 APIC_NAME=<API_CENTER_NAME>
+API_ID=uspto-api
+
 APIM_ID=$(az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv)
 
-az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
+az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/$API_ID"
 
 # PowerShell
 $RESOURCE_GROUP = "<RESOURCE_GROUP>"
 $APIC_NAME = "<API_CENTER_NAME>"
+$API_ID = "uspto-api"
 
 $APIM_ID = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].id" -o tsv
 
-az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/*"
+az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids "$APIM_ID/apis/$API_ID"
 ```
 
 > **NOTE**: Replace `<RESOURCE_GROUP>` and `<API_CENTER_NAME>` with your values.

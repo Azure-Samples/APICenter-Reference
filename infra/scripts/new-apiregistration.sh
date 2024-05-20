@@ -119,8 +119,14 @@ if [ -z "$API_MANAGEMENT_ID" ] ; then
 else
     echo "Registering API from API Management: $API_MANAGEMENT_ID ..."
 
-    registered=$(az apic service import-from-apim \
-    -g $RESOURCE_GROUP \
-    -s $SERVICE_NAME \
-    --source-resource-ids "$API_MANAGEMENT_ID/apis/*")
+    IFS='/' read -ra SEGMENTS <<< "$API_MANAGEMENT_ID"
+    API_IDs=$(az apim api list -g $SEGMENTS[4] -n $SEGMENTS[8] --query "[].id" | jq -r '.[]')
+
+    for API_ID in API_IDs
+    do
+        registered=$(az apic service import-from-apim \
+            -g $RESOURCE_GROUP \
+            -s $SERVICE_NAME \
+            --source-resource-ids $API_ID)
+    done
 fi

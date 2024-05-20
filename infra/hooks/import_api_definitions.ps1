@@ -2,6 +2,8 @@
 # It does the following:
 #   1. Gets the list of APIs registered in the API Center
 #   2. Iterates over the APIs and imports the API definitions
+#   3. Gets the list of APIs registered in the API Management
+#   4. Iterates over the APIs and imports the APIs from API Management to API Center
 
 # $REPOSITORY_ROOT = git rev-parse --show-toplevel
 $REPOSITORY_ROOT = "$(Split-Path $MyInvocation.MyCommand.Path)/../.."
@@ -53,4 +55,15 @@ $API_IDs | ForEach-Object {
         --specification $SPECIFICATION `
         --format inline `
         --value `@./infra/apis/$VALUE
+}
+
+# Get the list of APIs registered in the API Management
+$APIM_NAME = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].name" -o tsv
+$API_IDs = az apim api list -g $RESOURCE_GROUP -n $APIM_NAME --query "[].id" | ConvertFrom-Json
+
+# Iterate over the APIs and import the APIs from API Management to API Center
+$API_IDs | ForEach-Object {
+    $API_ID = $_
+
+    az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids $API_ID
 }

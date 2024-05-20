@@ -96,8 +96,15 @@ if ($ApiManagementId -eq "") {
 } else {
     Write-Host "Registering API from API Management: $ApiManagementId ..."
 
-    $registered = az apic service import-from-apim `
-    -g $ResourceGroup `
-    -s $ServiceName `
-    --source-resource-ids "$ApiManagementId/apis/*"
+    $segments = $ApiManagementId.Split("/", [System.StringSplitOptions]::RemoveEmptyEntries)
+
+    $ApiIds = az apim api list -g $segments[3] -n $segments[7] --query "[].id" | ConvertFrom-Json
+    $ApiIds | ForEach-Object {
+        $ApiId = $_
+
+        $registered = az apic service import-from-apim `
+            -g $ResourceGroup `
+            -s $ServiceName `
+            --source-resource-ids $ApiId
+    }
 }
