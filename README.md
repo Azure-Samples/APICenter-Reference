@@ -45,6 +45,24 @@ Provisioning and deploying all the resources are as easy as running a few comman
     azd up
     ```
 
+1. After the deployment is completed, navigate to Azure Portal and find the API Center instance. Then, you'll see all the APIs registered.
+
+   ![APIs registered on API Center](./docs/images/getting-started-01.png)
+
+1. Navigate to the API Analysis blade and see the analysis results.
+
+   ![API Analysis](./docs/images/getting-started-02.png)
+
+1. Find the Azure Static Web App instance name ending with `-portal` and open the app to see the API Center portal.
+
+   ![API Center Portal](./docs/images/getting-started-03.png)
+
+1. Login to the portal and you'll see all the APIs registered to the API Center.
+
+   ![API Center Portal](./docs/images/getting-started-04.png)
+
+## CI/CD Pipeline Integration
+
 If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the following command to create a GitHub repository and push the code to the repository.
 
 1. First of all, log in to GitHub.
@@ -68,13 +86,15 @@ If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the
 
 1. Now, you're good to go! Push the code to the GitHub repository or manually run the GitHub Actions workflow to get your portal deployed.
 
+## Other Integrations
+
 There are several ways to integrate API Center with your solutions. You can choose the one that fits your needs.
 
-- [API Registration](./docs/api-registration.md)
 - [API Center Analyzer Integration](./docs/api-center-analyzer-integration.md)
+- [API Registration](./docs/api-registration.md)
 <!-- - [API Center Event Handler](./docs/api-center-event-handler.md) -->
 - [Custom Metadata Management](./docs/custom-metadata-management.md)
-<!-- - [API Center Portal Integration](./docs/api-center-portal-integration.md) -->
+- [API Center Portal Integration](./docs/api-center-portal-integration.md)
 - [API Client SDK Integration](./docs/api-client-sdk-integration.md)
 
 ## Resources
