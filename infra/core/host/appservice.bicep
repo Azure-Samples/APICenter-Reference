@@ -48,7 +48,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
   properties: {
     serverFarmId: appServicePlanId
     siteConfig: {
-      linuxFxVersion: linuxFxVersion
+      linuxFxVersion: contains(kind, 'linux') ? linuxFxVersion : null
       alwaysOn: alwaysOn
       ftpsState: ftpsState
       minTlsVersion: '1.2'
@@ -126,4 +126,5 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
 
 output identityPrincipalId string = managedIdentity ? appService.identity.principalId : ''
 output name string = appService.name
+output location string = replace(toLower(appService.location), ' ', '')
 output uri string = 'https://${appService.properties.defaultHostName}'

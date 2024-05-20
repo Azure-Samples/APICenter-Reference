@@ -5,20 +5,24 @@
 #   1. Creates a service principal
 #   2. Adds required permissions to the app
 #   3. Sets the environment variables
+#   4. Installs the APIC Analyzer
+#   5. Installs the APIC Portal
+#   6. Imports the API definitions
 
 set -e
 
 echo "Running post-provision script..."
 
-REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+# REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+REPOSITORY_ROOT="$(dirname "$(realpath "$0")")/../.."
+
+# Load the azd environment variables
+"$REPOSITORY_ROOT/infra/hooks/load_azd_env.sh"
 
 # Run only if GITHUB_WORKSPACE is NOT set - this is NOT running in a GitHub Action workflow
 if [ -z "$GITHUB_WORKSPACE" ];
 then
     echo "Registering the application in Azure..."
-
-    # Load the azd environment variables
-    "$REPOSITORY_ROOT/infra/hooks/load_azd_env.sh"
 
     # Create a service principal and assign the required permissions
     appId=$AZURE_CLIENT_ID
@@ -57,3 +61,32 @@ then
 else
     echo "Skipping to register the application in Azure..."
 fi
+
+# Run only if GITHUB_WORKSPACE is NOT set - this is NOT running in a GitHub Action workflow
+if [ -z "$GITHUB_WORKSPACE" ];
+then
+    # Install the APIC Analyzer
+    echo "About to install the APIC Analyzer..."
+
+    "$REPOSITORY_ROOT/infra/hooks/install_apic_analyzer.sh"
+else
+    echo "Skipping to install the APIC Analyzer..."
+fi
+
+# Run only if GITHUB_WORKSPACE is NOT set - this is NOT running in a GitHub Action workflow
+if [ -z "$GITHUB_WORKSPACE" ];
+then
+    # Install the APIC Portal
+    echo "About to install the APIC Portal..."
+
+    # azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$AZURE_ENV_NAME-portal"
+
+    "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.sh"
+else
+    echo "Skipping to install the APIC Portal..."
+fi
+
+# Import the API definitions
+echo "About to import API definitions..."
+
+"$REPOSITORY_ROOT/infra/hooks/import_api_definitions.sh"

@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 -->
 # API Client SDK Integration
 
-You can create a client SDK from APIs registered on API Center using Visual Studio Code.
+You can create a client SDK from APIs registered on API Center using Visual Studio Code. This section will guide you through the integration process.
 
 > To use this feature, you need to install the [API Center extension](https://marketplace.visualstudio.com/items?itemName=apidev.azure-api-center) in Visual Studio Code. In addition to that, you may be asked to install the [Microsoft Kiota](https://marketplace.visualstudio.com/items?itemName=ms-graph.kiota) extension.
 

@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 -->
 # API Center Analyzer Integration
 
-You can analyze your API documents using Visual Studio Code (Standalone) or Azure Portal (Server-Side).
+You can analyze your API documents using Visual Studio Code (Standalone) or Azure Portal (Server-Side). This section will guide you through the integration process.
 
 ## Standalone Analyzer through Visual Studio Code
 
