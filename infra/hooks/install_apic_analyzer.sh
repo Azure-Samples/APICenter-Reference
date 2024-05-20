@@ -18,7 +18,7 @@ REPOSITORY_ROOT="$(dirname "$(realpath "$0")")/../.."
 echo "Installing the APIC Analyzer..."
 
 # Create a new directory for the analyzer
-ANALYZER_NAME="${AZURE_ENV_NAME}-analyzer"
+ANALYZER_NAME="$AZURE_ENV_NAME-analyzer"
 mkdir -p "$REPOSITORY_ROOT/$ANALYZER_NAME"
 
 pushd "$REPOSITORY_ROOT/$ANALYZER_NAME"

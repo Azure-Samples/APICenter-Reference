@@ -18,7 +18,7 @@ REPOSITORY_ROOT="$(dirname "$(realpath "$0")")/../.."
 echo "Installing the APIC Portal..."
 
 # Create a new directory for the portal
-PORTAL_NAME="${AZURE_API_CENTER_PORTAL_DIRECTORY}"
+PORTAL_NAME="$AZURE_ENV_NAME-portal"
 mkdir -p "$REPOSITORY_ROOT/$PORTAL_NAME"
 
 pushd "$REPOSITORY_ROOT/$PORTAL_NAME"

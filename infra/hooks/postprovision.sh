@@ -79,7 +79,7 @@ then
     # Install the APIC Portal
     echo "About to install the APIC Portal..."
 
-    azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$($AZURE_ENV_NAME)-portal"
+    # azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$AZURE_ENV_NAME-portal"
 
     "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.sh"
 else
