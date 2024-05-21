@@ -37,12 +37,6 @@ pwsh -Command {
     azd env set APIC_RESOURCE_GROUP_NAME "rg-$AZURE_ENV_NAME"
     azd env set USE_MONITORING true
 
-    # "AZURE_LOCATION=`"$AZURE_API_CENTER_LOCATION`"" | Out-File "$REPOSITORY_ROOT/$ANALYZER_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "AZURE_SUBSCRIPTION_ID=`"$AZURE_SUBSCRIPTION_ID`"" | Out-File "$REPOSITORY_ROOT/$ANALYZER_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "APIC_NAME=`"$AZURE_API_CENTER`"" | Out-File "$REPOSITORY_ROOT/$ANALYZER_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "APIC_RESOURCE_GROUP_NAME=`"rg-$AZURE_ENV_NAME`"" | Out-File "$REPOSITORY_ROOT/$ANALYZER_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "USE_MONITORING=`"true`"" | Out-File "$REPOSITORY_ROOT/$ANALYZER_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-
     # Install the analyzer
     azd up
 
