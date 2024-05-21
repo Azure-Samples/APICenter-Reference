@@ -30,7 +30,7 @@ pwsh -Command {
     pushd "$REPOSITORY_ROOT/$PORTAL_NAME"
 
     # Initialize the analyzer
-    azd init -e $AZURE_ENV_NAME --template justinyoo/APICenter-Portal-Starter --branch feature/azdevfy
+    azd init -e $AZURE_ENV_NAME --template Azure/APICenter-Portal-Starter --branch main
 
     # Set the environment variables
     azd env set AZURE_LOCATION $AZURE_API_CENTER_LOCATION
@@ -40,13 +40,6 @@ pwsh -Command {
     azd env set AZURE_API_CENTER_RESOURCE_GROUP "rg-$AZURE_ENV_NAME"
     azd env set AZURE_API_CENTER_PORTAL_DIRECTORY $PORTAL_NAME
     azd env set AZURE_STATIC_APP_LOCATION $AZURE_STATIC_APP_LOCATION
-
-    # "AZURE_LOCATION=`"$AZURE_API_CENTER_LOCATION`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "AZURE_SUBSCRIPTION_ID=`"$AZURE_SUBSCRIPTION_ID`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "USE_EXISTING_API_CENTER=`"true`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "AZURE_API_CENTER=`"$AZURE_API_CENTER`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "AZURE_API_CENTER_RESOURCE_GROUP=`"rg-$AZURE_ENV_NAME`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
-    # "AZURE_STATIC_APP_LOCATION=`"$AZURE_STATIC_APP_LOCATION`"" | Out-File "$REPOSITORY_ROOT/$PORTAL_NAME/.azure/$AZURE_ENV_NAME/.env" -Append
 
     # Install the analyzer
     azd up

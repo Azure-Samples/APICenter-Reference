@@ -24,7 +24,7 @@ mkdir -p "$REPOSITORY_ROOT/$PORTAL_NAME"
 pushd "$REPOSITORY_ROOT/$PORTAL_NAME"
 
 # Initialize the portal
-azd init -e $AZURE_ENV_NAME --template justinyoo/APICenter-Portal-Starter --branch feature/azdevfy
+azd init -e $AZURE_ENV_NAME --template Azure/APICenter-Portal-Starter --branch main
 
 # Set the environment variables
 azd env set AZURE_LOCATION $AZURE_API_CENTER_LOCATION
