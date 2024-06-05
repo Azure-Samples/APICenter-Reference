@@ -71,7 +71,7 @@ Let's use a specification that already aligns to the configured API rulesets.
 
 1. Navigate to http://localhost:5051/swagger/v1/openapi.json to see the OpenAPI document.
 
-   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-08.png)
+   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-08.png)
 
 1. Save the OpenAPI document to `weatherforecast-reviewed.json`.
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.

@@ -71,7 +71,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 1. Click `https://localhost:5051/swagger/v1.0.0/swagger.json` to see the OpenAPI document.
 
-   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-08.png)
+   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-dotnet-08.png)
 
 1. Save the OpenAPI document to `weatherforecast-reviewed.json`.
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
