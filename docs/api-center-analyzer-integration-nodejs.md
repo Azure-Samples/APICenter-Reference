@@ -9,24 +9,23 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 1. Run the sample app.
 
-    ```bash
-    # .NET
-    dotnet watch run --project ./dotnet/src/ApiApp
+    ```javascript
+    cd nodejs/webapi && npm start
     ```
 
    You'll see the following Swagger UI page.
 
-   ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-01.png)
+   ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
-1. Click `https://localhost:5051/swagger/v1/swagger.json` to see the OpenAPI document.
+1. Navigate to http://localhost:5051/swagger/v1/openapi.json to see the OpenAPI document.
 
-   ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-02.png)
+   ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-nodejs-02.png)
 
 1. Save the OpenAPI document to `weatherforecast.json`.
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 1. Open `weatherforecast.json` in Visual Studio Code. You'll see many yellow lines and red lines
 
-   ![OpenAPI - standalone analysis](./images/api-center-analyzer-integration-03.png)
+   ![OpenAPI - standalone analysis](./images/api-center-analyzer-integration-nodejs-03.png)
 
 1. Type <kbd>F1</kbd> then select "Azure API Center: Set active API Style Guide".
 
@@ -40,36 +39,37 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-06.png)
 
-1. Open `dotnet/src/ApiApp/Program.cs` and find the line:
+Let's use a specification that already aligns to the configured API rulesets.
+ 
+1. Open `nodejs/webapi/server.js` and find the line:
 
-    ```csharp
-    // Add services to the container.
-    builder.Services.AddOpenApiService();
-    //builder.Services.AddImprovedOpenApiService();
+    ```javascript
+    const swaggerSpec = require('./swagger/weatherforecast.json')
+    // const swaggerSpec = require('./swagger/weatherforecast-reviewed.json')
     ```
 
-1. Comment out this line: `builder.Services.AddOpenApiService();`, and uncomment this line: `//builder.Services.AddImprovedOpenApiService();`.
+1. Comment out this line: `const swaggerSpec = require('./swagger/weatherforecast.json')`, and uncomment this line: `const swaggerSpec = require('./swagger/weatherforecast-reviewed.json')`.
+
 1. Find the line:
 
-    ```csharp
-    // Add endpoint to the application.
-    app.UseWeatherForecastEndpoint(summaries);
-    //app.UseImprovedWeatherForecastEndpoint(summaries);
+    ```javascript
+    //const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast.json');
+    const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast-reviewed.json');
     ```
 
-1. Comment out this line: `app.UseWeatherForecastEndpoint(summaries);`, and uncomment this line: `//app.UseImprovedWeatherForecastEndpoint(summaries);`.
-1. Run the sample app again.
+1. Comment out this line: `const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast.json');`, and uncomment this line: `const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast-reviewed.json');`.
 
-    ```bash
-    # .NET
-    dotnet watch run --project ./dotnet/src/ApiApp
+1. Run the sample app again. Ensure you are still in `nodejs/webapi`
+
+    ```javascript
+    npm start
     ```
 
    You'll see the following Swagger UI page.
 
-   ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-07.png)
+   ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-07.png)
 
-1. Click `https://localhost:5051/swagger/v1.0.0/swagger.json` to see the OpenAPI document.
+1. Navigate to http://localhost:5051/swagger/v1/openapi.json to see the OpenAPI document.
 
    ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-08.png)
 
