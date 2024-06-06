@@ -17,7 +17,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
-1. Navigate to http://localhost:5051/swagger/v1/openapi.json to see the OpenAPI document.
+1. Navigate to http://localhost:5051/swagger-basic.json to see the OpenAPI document.
 
    ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-nodejs-02.png)
 
@@ -39,25 +39,39 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-06.png)
 
-Let's use a specification that already aligns to the configured API rulesets.
- 
-1. Open `nodejs/webapi/server.js` and find the line:
+
+1. Open `nodejs/webapi/server.js`, find the following code block and comment it out
 
     ```javascript
-    const swaggerSpec = require('./swagger/weatherforecast.json')
-    // const swaggerSpec = require('./swagger/weatherforecast-reviewed.json')
+    // route to serve basic swagger JSON, Set up Swagger UI and redirect
+    app.get('/swagger-basic.json', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpecs.basic);
+    });
+    
+    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/basic');
+    
+    app.get('/', (req, res) => {
+      res.redirect('/api-docs/basic');
+    });
     ```
 
-1. Comment out this line: `const swaggerSpec = require('./swagger/weatherforecast.json')`, and uncomment this line: `const swaggerSpec = require('./swagger/weatherforecast-reviewed.json')`.
-
-1. Find the line:
+1. Find the following code block and uncomment it:
 
     ```javascript
-    //const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast.json');
-    const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast-reviewed.json');
+    // route to serve improved swagger JSON, Set up Swagger UI and redirect
+    app.get('/swagger-improved.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(swaggerSpecs.improved);
+    });
+    
+    setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs/improved');
+    
+    app.get('/', (req, res) => {
+      res.redirect('/api-docs/improved');
+    });
     ```
 
-1. Comment out this line: `const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast.json');`, and uncomment this line: `const openapiFilePath = path.resolve(__dirname, 'swagger', 'weatherforecast-reviewed.json');`.
 
 1. Run the sample app again. Ensure you are still in `nodejs/webapi`
 
@@ -69,7 +83,7 @@ Let's use a specification that already aligns to the configured API rulesets.
 
    ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-07.png)
 
-1. Navigate to http://localhost:5051/swagger/v1/openapi.json to see the OpenAPI document.
+1. Navigate to http://localhost:5051/swagger-improved.json to see the OpenAPI document.
 
    ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-08.png)
 
