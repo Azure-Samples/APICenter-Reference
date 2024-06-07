@@ -92,15 +92,15 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
     ```javascript
     // route to serve basic swagger JSON, Set up Swagger UI and redirect
-    app.get('/swagger-basic.json', (req, res) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(swaggerSpecs.basic);
+    app.get('/api-docs/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpecs.basic);
     });
     
-    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/basic');
+    setupSwaggerUi(app, swaggerSpecs.basic, '/weatherforecast');
     
     app.get('/', (req, res) => {
-      res.redirect('/api-docs/basic');
+      res.redirect('/weatherforecast');
     });
     ```
 
@@ -108,15 +108,15 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
     ```javascript
     // route to serve improved swagger JSON, Set up Swagger UI and redirect
-    app.get('/swagger-improved.json', (req, res) => {
+    app.get('/api-docs/swagger.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(swaggerSpecs.improved);
     });
     
-    setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs/improved');
+    setupSwaggerUi(app, swaggerSpecs.improved, '/weatherforecast');
     
     app.get('/', (req, res) => {
-      res.redirect('/api-docs/improved');
+      res.redirect('/weatherforecast');
     });
     ```
 
