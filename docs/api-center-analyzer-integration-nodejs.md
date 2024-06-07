@@ -13,6 +13,12 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
     cd nodejs/webapi && npm install
     ```
 
+1. Install dependencies.
+
+     ```javascript
+    cd nodejs/webapi && npm install
+    ```
+
 1. Run the sample app.
 
     ```javascript
@@ -23,11 +29,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
-<<<<<<< HEAD
-1. Navigate to http://localhost:3030/api-docs/swagger.json to see the OpenAPI document.
-=======
-1. Navigate to http://localhost:5051/swagger-basic.json to see the OpenAPI document.
->>>>>>> ef24554 (modified code to generate openapi specs for both basic and improved)
+1. Navigate to http://localhost:3030/swagger.json to see the OpenAPI document.
 
    ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-nodejs-02.png)
 
@@ -92,15 +94,15 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
     ```javascript
     // route to serve basic swagger JSON, Set up Swagger UI and redirect
-    app.get('/api-docs/swagger.json', (req, res) => {
+    app.get('/swagger.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpecs.basic);
     });
     
-    setupSwaggerUi(app, swaggerSpecs.basic, '/weatherforecast');
+    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs');
     
     app.get('/', (req, res) => {
-      res.redirect('/weatherforecast');
+      res.redirect('/api-docs');
     });
     ```
 
@@ -108,15 +110,15 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
     ```javascript
     // route to serve improved swagger JSON, Set up Swagger UI and redirect
-    app.get('/api-docs/swagger.json', (req, res) => {
+    app.get('/swagger.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(swaggerSpecs.improved);
     });
     
-    setupSwaggerUi(app, swaggerSpecs.improved, '/weatherforecast');
+    setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs');
     
     app.get('/', (req, res) => {
-      res.redirect('/weatherforecast');
+      res.redirect('/api-docs');
     });
     ```
 
@@ -132,11 +134,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-07.png)
 
-<<<<<<< HEAD
-1. Navigate to http://localhost:3030/api-docs/swagger.json to see the OpenAPI document.
-=======
-1. Navigate to http://localhost:5051/swagger-improved.json to see the OpenAPI document.
->>>>>>> ef24554 (modified code to generate openapi specs for both basic and improved)
+1. Navigate to http://localhost:3030/swagger.json to see the OpenAPI document.
 
    ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-08.png)
 
