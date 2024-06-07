@@ -77,7 +77,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 1. Open `weatherforecast-reviewed.json` in Visual Studio Code. You'll see all yellow lines and red lines disappeared.
 
-   ![Standalone API Analysis - reviewed analysis result](./images/api-center-analyzer-integration-09.png)
+   ![Standalone API Analysis - reviewed analysis result](./images/api-center-analyzer-integration-dotnet-09.png)
 
 ## Server-Side Analyzer through Azure Portal
 

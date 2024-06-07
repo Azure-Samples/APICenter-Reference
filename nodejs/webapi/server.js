@@ -6,7 +6,7 @@ const { swaggerSpecs, setupSwaggerUi } = require('./swagger/openapiservice');
 // JSDoc comments for api endpoints
 /**
  * @swagger
- * /weatherforecast:
+ * /weatherdata:
  *   get:
  *    description: Use to request weather data
  *    operationId: getWeatherData
@@ -77,33 +77,33 @@ const weatherdata = [
   }
 ]
 
-// send weather data to /weatherforecast 
-app.get('/weatherforecast', (req, res) => {
+// send weather data to /weatherdata
+app.get('/weatherdata', (req, res) => {
     res.json(weatherdata);
 });
 
 // route to serve basic swagger JSON, Set up Swagger UI and redirect
-app.get('/swagger-basic.json', (req, res) => {
+app.get('/api-docs/swagger.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpecs.basic);
 });
 
-setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/basic');
+setupSwaggerUi(app, swaggerSpecs.basic, '/weatherforecast');
 
 app.get('/', (req, res) => {
-  res.redirect('/api-docs/basic');
+  res.redirect('/weatherforecast');
 });
 
 // // route to serve improved swagger JSON, Set up Swagger UI and redirect
-// app.get('/swagger-improved.json', (req, res) => {
+// app.get('/api-docs/swagger.json', (req, res) => {
 //   res.setHeader('Content-Type', 'application/json');
 //   res.send(swaggerSpecs.improved);
 // });
 
-// setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs/improved');
+// setupSwaggerUi(app, swaggerSpecs.improved, '/weatherforecast');
 
 // app.get('/', (req, res) => {
-//   res.redirect('/api-docs/improved');
+//   res.redirect('/weatherforecast');
 // });
 
 const port = process.env.PORT || 3000;
