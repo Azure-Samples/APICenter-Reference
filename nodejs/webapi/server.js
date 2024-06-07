@@ -6,7 +6,7 @@ const { swaggerSpecs, setupSwaggerUi } = require('./swagger/openapiservice');
 // JSDoc comments for api endpoints
 /**
  * @swagger
- * /weatherdata:
+ * /weatherforecast:
  *   get:
  *    description: Use to request weather data
  *    operationId: getWeatherData
@@ -43,73 +43,53 @@ const { swaggerSpecs, setupSwaggerUi } = require('./swagger/openapiservice');
 
 const app = express();
 
-// sample weather data
-const weatherdata = [
-  {
-    "date": "2024-06-05",
-    "temperatureC": 51,
-    "summary": "Cool",
-    "temperatureF": 123
-  },
-  {
-    "date": "2024-06-06",
-    "temperatureC": 28,
-    "summary": "Mild",
-    "temperatureF": 82
-  },
-  {
-    "date": "2024-06-07",
-    "temperatureC": 17,
-    "summary": "Bracing",
-    "temperatureF": 62
-  },
-  {
-    "date": "2024-06-08",
-    "temperatureC": 14,
-    "summary": "Scorching",
-    "temperatureF": 57
-  },
-  {
-    "date": "2024-06-09",
-    "temperatureC": 14,
-    "summary": "Cool",
-    "temperatureF": 57
-  }
-]
+// Random weather data
+const generateRandomTemperature = () => Math.floor(Math.random() * 61) - 20;
+const generateRandomSummary = () => ['Hot', 'Warm', 'Mild', 'Cool', 'Bracing', 'Scorching', 'Freezing'][Math.floor(Math.random() * 7)];
+
+// Function to generate random weather data for a specified number of days
+const generateRandomWeatherData = numDays => {
+  const startDate = new Date();
+  return Array.from({ length: numDays }, (_, i) => {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    const temperatureC = generateRandomTemperature();
+    const temperatureF = Math.round((temperatureC * 9) / 5 + 32);
+    const summary = generateRandomSummary();
+    return { date: date.toISOString().split('T')[0], temperatureC, summary, temperatureF };
+  });
+};
+
+// Generate random weather data for the next 5 days
+const weatherData = generateRandomWeatherData(5);
 
 // send weather data to /weatherdata
-app.get('/weatherdata', (req, res) => {
-    res.json(weatherdata);
+app.get('/weatherforecast', (req, res) => {
+    res.json(weatherData);
 });
 
 // route to serve basic swagger JSON, Set up Swagger UI and redirect
-app.get('/api-docs/swagger.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpecs.basic);
-});
-
-setupSwaggerUi(app, swaggerSpecs.basic, '/weatherforecast');
-
-app.get('/', (req, res) => {
-  res.redirect('/weatherforecast');
-});
-
-// // route to serve improved swagger JSON, Set up Swagger UI and redirect
-// app.get('/api-docs/swagger.json', (req, res) => {
-//   res.setHeader('Content-Type', 'application/json');
-//   res.send(swaggerSpecs.improved);
+// app.get('/swagger.json', (req, res) => {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send(swaggerSpecs.basic);
 // });
-
-// setupSwaggerUi(app, swaggerSpecs.improved, '/weatherforecast');
-
+// setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs');
 // app.get('/', (req, res) => {
-//   res.redirect('/weatherforecast');
+//   res.redirect('/api-docs');
 // });
 
-const port = process.env.PORT || 3000;
+
+// route to serve improved swagger JSON, Set up Swagger UI and redirect
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpecs.improved);
+});
+setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs');
+app.get('/', (req, res) => {
+  res.redirect('/api-docs');
+});
+
+const port = process.env.PORT || 3030;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
-}
-);
-
-
+});
