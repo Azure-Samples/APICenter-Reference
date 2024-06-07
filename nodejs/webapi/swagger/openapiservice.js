@@ -7,7 +7,7 @@ const BasicswaggerDefinition = {
         openapi: "3.0.0",
         info: {
          title: "ApiApp",
-         description: "[http://localhost:5051/swagger-basic.json](http://localhost:5051/swagger-basic.json)",
+         description: "[http://localhost:3000/swagger-basic.json](http://localhost:3000/swagger-basic.json)",
          version: "1.0.0"
         },
     },
@@ -20,7 +20,7 @@ const ImprovedswaggerDefinition = {
         openapi: "3.0.0",
         info: {
          title: "Weather Forecast API",
-         description: "[http://localhost:5051/swagger-improved.json](http://localhost:5051/swagger-improved.json)",
+         description: "[http://localhost:3000/swagger-improved.json](http://localhost:3000/swagger-improved.json)",
          version: "1.0.0",
          contact: {
             name: 'Contoso',
@@ -30,7 +30,7 @@ const ImprovedswaggerDefinition = {
         },
         servers: [
            {
-            url: 'http://localhost:5051',
+            url: 'http://localhost:3000',
            },
         ],
         tags: [

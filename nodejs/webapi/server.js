@@ -106,7 +106,7 @@ app.get('/', (req, res) => {
 //   res.redirect('/api-docs/improved');
 // });
 
-const port = process.env.PORT || 5051;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 }
