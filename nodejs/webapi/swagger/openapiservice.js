@@ -1,54 +1,59 @@
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const port = 3030;
+
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const description = `[http://localhost:${port}/api-docs/swagger.json](http://localhost:${port}/api-docs/swagger.json)`;
+const serverUrl = `http://localhost:${port}`;
 
 // Basic swagger definition
 const BasicswaggerDefinition = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-         title: "ApiApp",
-         description: "[http://localhost:3030/swagger.json](http://localhost:3030/swagger.json)",
-         version: "1.0.0"
-        },
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "webapi",
+      description: description,
+      version: "1.0.0",
     },
-    apis: ['./server.js'],
+  },
+  apis: ["./server.js"],
 };
 
 // Improved swagger definition
 const ImprovedswaggerDefinition = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-         title: "Weather Forecast API",
-         description: "[http://localhost:3030/swagger.json](http://localhost:3030/swagger.json)",
-         version: "1.0.0",
-         contact: {
-            name: 'Contoso',
-            email: 'api@contoso.com',
-            url: 'https://contoso.com/support',
-         },
-        },
-        servers: [
-           {
-            url: 'http://localhost:3030',
-           },
-        ],
-        tags: [
-           {
-            name: 'Weather',
-            description: 'Weather API',
-           },
-        ],
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Weather Forecast API",
+      description: description,
+      version: "1.0.0",
+      contact: {
+        name: "Contoso",
+        email: "api@contoso.com",
+        url: "https://contoso.com/support",
+      },
     },
-    apis: ['./server.js'],
-  };
+    servers: [
+      {
+        url: serverUrl,
+      },
+    ],
+    tags: [
+      {
+        name: "Weather",
+        description: "Weather API",
+      },
+    ],
+  },
+  apis: ["./server.js"],
+};
 
 const swaggerSpecs = {
   basic: swaggerJsdoc(BasicswaggerDefinition),
   improved: swaggerJsdoc(ImprovedswaggerDefinition),
 };
 
-const setupSwaggerUi = (app, specs, path = '/api-docs') => {
+const setupSwaggerUi = (app, specs, path = "/api-docs/swagger") => {
   app.use(path, swaggerUi.serve, swaggerUi.setup(specs));
 };
 
