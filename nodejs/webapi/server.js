@@ -1,5 +1,6 @@
 const express = require("express"); // import express
 const { swaggerSpecs, setupSwaggerUi } = require("./swagger/openapiservice");
+const { port } = require("./config.js");
 
 // JSDoc comments for api endpoints
 /**
@@ -40,7 +41,6 @@ const { swaggerSpecs, setupSwaggerUi } = require("./swagger/openapiservice");
  */
 
 const app = express();
-const port = process.env.PORT || 3030;
 
 // Random weather data
 const generateRandomTemperatureC = () => Math.floor(Math.random() * 61) - 20;
@@ -74,10 +74,9 @@ app.get("/weatherforecast", (req, res) => {
   res.json(weatherData);
 });
 
-// route to serve basic/ improved JSON, Set up Swagger UI and redirect /
+// route to serve basic/ improved JSON, Set up Swagger UI and redirect
 app.get("/api-docs/swagger.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(swaggerSpecs.improved);
+  // res.send(swaggerSpecs.improved);
   res.send(swaggerSpecs.basic);
 });
 

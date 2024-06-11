@@ -1,4 +1,4 @@
-const port = 3030;
+const { port } = require("../config.js");
 
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -9,11 +9,11 @@ const serverUrl = `http://localhost:${port}`;
 // Basic swagger definition
 const BasicswaggerDefinition = {
   definition: {
-    openapi: "3.0.0",
+    openapi: "3.0.1",
     info: {
       title: "webapi",
       description: description,
-      version: "1.0.0",
+      version: "1.0",
     },
   },
   apis: ["./server.js"],
@@ -22,11 +22,11 @@ const BasicswaggerDefinition = {
 // Improved swagger definition
 const ImprovedswaggerDefinition = {
   definition: {
-    openapi: "3.0.0",
+    openapi: "3.0.1",
     info: {
       title: "Weather Forecast API",
       description: description,
-      version: "1.0.0",
+      version: "v1.0.0",
       contact: {
         name: "Contoso",
         email: "api@contoso.com",
