@@ -43,29 +43,43 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 1. You can also choose the custom API style guide that reflects your organization's policies. This time choose `Select Local File` then select the `resources/rulesets/oas.yaml` file. You'll still see many yellow lines and red lines. Hover your mouse and see what needs to be fixed.
 
-   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-06.png)
+   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-nodejs-06.png)
 
+1. Open `nodejs/webapi/server.js`,
+    - Find the following code block:
 
-1. Open `nodejs/webapi/server.js`, find the following code block:
+        ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        app.get("/api-docs/swagger.json", (req, res) => {
+        // res.send(swaggerSpecs.improved);
+        res.send(swaggerSpecs.basic);
+        });
+
+    - Uncomment the line `res.send(swaggerSpecs.improved);`
+    - Comment out the line `res.send(swaggerSpecs.basic);`
+
+        ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        app.get("/api-docs/swagger.json", (req, res) => {
+        res.send(swaggerSpecs.improved);
+        // res.send(swaggerSpecs.basic);
+        });
+        ```
+
+1. Then find the following code block:
 
     ```javascript
     // setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
     setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
     ```
 
-1. Uncomment the line `// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");`
+    - Uncomment the line `// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");`
+    - Comment out the line `setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');`
 
-    ```javascript
-    setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
-    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
-    ```
-
-1. Comment out the line `setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');`
-
-    ```javascript
-    setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
-    // setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
-    ```
+        ```javascript
+        setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+        // setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
+        ```
 
 1. Run the sample app again. Ensure you are still in `nodejs/webapi`
 
@@ -124,11 +138,11 @@ To use this server-side analysis feature, you need to install the [APICenter Ana
 ### Server-Side Analysis by Registering API
 
 1. Register `weatherforecast.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
-1. Check the warnings and errors in the API Center.
+1. Check the warnings in the API Center.
 
-   ![Server-Side API Analysis](./images/api-center-analyzer-integration-10.png)
+   ![Server-Side API Analysis](./images/api-center-analyzer-integration-nodejs-10.png)
 
 1. Update existing API definition with `weatherforecast-reviewed.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
-1. Check the warnings and errors in the API Center.
+1. Check the warnings in the API Center.
 
-   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-11.png)
+   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-nodejs-11.png)

@@ -38,7 +38,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 1. You can also choose the custom API style guide that reflects your organization's policies. This time choose `Select Local File` then select the `resources/rulesets/oas.yaml` file. You'll still see many yellow lines and red lines. Hover your mouse and see what needs to be fixed.
 
-   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-06.png)
+   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-dotnet-06.png)
 
 1. Open `dotnet/src/ApiApp/Program.cs` and find the line:
 
@@ -118,9 +118,9 @@ To use this server-side analysis feature, you need to install the [APICenter Ana
 1. Register `weatherforecast.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
 1. Check the warnings and errors in the API Center.
 
-   ![Server-Side API Analysis](./images/api-center-analyzer-integration-10.png)
+   ![Server-Side API Analysis](./images/api-center-analyzer-integration-dotnet-10.png)
 
 1. Update existing API definition with `weatherforecast-reviewed.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
 1. Check the warnings and errors in the API Center.
 
-   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-11.png)
+   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-dotnet-11.png)
