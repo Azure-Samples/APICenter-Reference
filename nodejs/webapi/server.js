@@ -74,11 +74,14 @@ app.get("/weatherforecast", (req, res) => {
   res.json(weatherData);
 });
 
+// route to serve basic/ improved JSON, Set up Swagger UI and redirect
 app.get("/api-docs/swagger.json", (req, res) => {
+  // res.send(swaggerSpecs.improved);
   res.send(swaggerSpecs.basic);
-});
+  });
 
-setupSwaggerUi(app, swaggerSpecs.basic, "/api-docs/swagger");
+  // setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+  setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
 
 app.get("/", (req, res) => {
   res.redirect("/api-docs/swagger");
