@@ -52,24 +52,40 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
    ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-nodejs-06.png)
 
 1. Open `nodejs/webapi/server.js`,
-    - Find the following code block and replace both instances of `swaggerSpecs.basic` with `swaggerSpecs.improved`:
+    - Find the following code block:
 
         ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
         app.get("/api-docs/swagger.json", (req, res) => {
+        // res.send(swaggerSpecs.improved);
         res.send(swaggerSpecs.basic);
         });
-
-        setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
         ```
 
-    - Final code block should be as follows:
+    - Uncomment the line `res.send(swaggerSpecs.improved);`
+    - Comment out the line `res.send(swaggerSpecs.basic);`
 
         ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
         app.get("/api-docs/swagger.json", (req, res) => {
         res.send(swaggerSpecs.improved);
+        // res.send(swaggerSpecs.basic);
         });
+        ```
 
-        setupSwaggerUi(app, swaggerSpecs.improved, '/api-docs/swagger');
+1. Then find the following code block:
+
+    ```javascript
+    // setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
+    ```
+
+    - Uncomment the line `// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");`
+    - Comment out the line `setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');`
+
+        ```javascript
+        setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+        // setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
         ```
 
 1. Run the sample app again. Ensure you are still in `nodejs/webapi`
