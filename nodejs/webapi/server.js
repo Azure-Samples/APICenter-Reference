@@ -1,6 +1,6 @@
-const express = require("express"); // import express
-const { swaggerSpecs, setupSwaggerUi } = require("./swagger/openapiservice");
-const { port } = require("./config.js");
+import express from "express"; // import express
+import { swaggerSpecs, setupSwaggerUi } from "./swagger/openapiservice.js";
+import { port } from "./config.js";
 
 // JSDoc comments for api endpoints
 /**
@@ -74,13 +74,10 @@ app.get("/weatherforecast", (req, res) => {
   res.json(weatherData);
 });
 
-// route to serve basic/ improved JSON, Set up Swagger UI and redirect
 app.get("/api-docs/swagger.json", (req, res) => {
-  // res.send(swaggerSpecs.improved);
   res.send(swaggerSpecs.basic);
 });
 
-// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
 setupSwaggerUi(app, swaggerSpecs.basic, "/api-docs/swagger");
 
 app.get("/", (req, res) => {

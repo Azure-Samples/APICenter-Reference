@@ -1,7 +1,7 @@
-const { port } = require("../config.js");
+import { port } from "../config.js";
 
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 const description = `[http://localhost:${port}/api-docs/swagger.json](http://localhost:${port}/api-docs/swagger.json)`;
 const serverUrl = `http://localhost:${port}`;
@@ -57,7 +57,4 @@ const setupSwaggerUi = (app, specs, path = "/api-docs/swagger") => {
   app.use(path, swaggerUi.serve, swaggerUi.setup(specs));
 };
 
-module.exports = {
-  swaggerSpecs,
-  setupSwaggerUi,
-};
+export { setupSwaggerUi, swaggerSpecs };
