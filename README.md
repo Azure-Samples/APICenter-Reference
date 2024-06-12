@@ -9,7 +9,7 @@ Throughout this reference sample, we'd like to give developer experiences how to
   - To perform shift-left API governance functionality in VS Code
   - To run APIC Analyzer for server-side linting
   - To manage custom metadata
-  - To handle events through Azure Event Grid and Logic Apps
+  <!-- - To handle events through Azure Event Grid and Logic Apps -->
 - API Discovery and Consumption
   - To integrate the client SDK in .NET & JavaScript
   - To prepare the server app scaffolding in .NET and JavaScript
@@ -90,7 +90,8 @@ If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the
 
 There are several ways to integrate API Center with your solutions. You can choose the one that fits your needs.
 
-- [API Center Analyzer Integration](./docs/api-center-analyzer-integration.md)
+- [API Center Analyzer Integration - .NET](./docs/api-center-analyzer-integration-dotnet.md)
+- [API Center Analyzer Integration - JavaScript](./docs/api-center-analyzer-integration-nodejs.md)
 - [API Registration](./docs/api-registration.md)
 <!-- - [API Center Event Handler](./docs/api-center-event-handler.md) -->
 - [Custom Metadata Management](./docs/custom-metadata-management.md)
