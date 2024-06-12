@@ -2,9 +2,11 @@
   "name": "webapi",
   "version": "1.0.0",
   "description": "Sample Web API using Nodejs and Express",
-  "main": "server.js",
+  "exports": "./server.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
     "eslint": "eslint ./",
     "eslint-fix": "eslint ./ --fix",
     "lint": "eslint \"./**/*.js\" --fix",
@@ -14,8 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "nodemon": "^3.1.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
@@ -25,6 +27,10 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "globals": "^15.4.0",
+    "nodemon": "^3.1.3",
     "prettier": "3.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
