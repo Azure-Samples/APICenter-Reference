@@ -44,8 +44,23 @@
     }
   },
 
+  "portsAttributes": {
+    "3000": {
+      "label": "React App",
+      "onAutoForward": "notify"
+    },
+    "3030": {
+      "label": "Expressjs API",
+      "onAutoForward": "notify"
+    },
+    "5051": {
+      "label": ".NET API",
+      "onAutoForward": "notify"
+    }
+  },
+
   "forwardPorts": [
-    5000, 5001, 5050, 5051, 8000, 8001, 8080, 8081
+    5000, 5001, 5050, 5051, 3000, 3030
   ],
 
   "onCreateCommand": "/usr/bin/zsh ./.devcontainer/on-create.sh > ~/on-create.log",

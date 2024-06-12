@@ -7,26 +7,31 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 > To use this standalone analyzer, you need to install the [API Center extension](https://marketplace.visualstudio.com/items?itemName=apidev.azure-api-center) in Visual Studio Code.
 
+1. Install dependencies.
+
+     ```javascript
+    cd nodejs/webapi && npm install
+    ```
+
 1. Run the sample app.
 
-    ```bash
-    # .NET
-    dotnet watch run --project ./dotnet/src/ApiApp
+    ```javascript
+    npm start
     ```
 
    You'll see the following Swagger UI page.
 
-   ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-01.png)
+   ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
-1. Click `https://localhost:5051/swagger/v1/swagger.json` to see the OpenAPI document.
+1. Navigate to http://localhost:3030/api-docs/swagger.json to see the OpenAPI document.
 
-   ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-02.png)
+   ![OpenAPI - weather forecast](./images/api-center-analyzer-integration-nodejs-02.png)
 
 1. Save the OpenAPI document to `weatherforecast.json`.
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 1. Open `weatherforecast.json` in Visual Studio Code. You'll see many yellow lines and red lines
 
-   ![OpenAPI - standalone analysis](./images/api-center-analyzer-integration-03.png)
+   ![OpenAPI - standalone analysis](./images/api-center-analyzer-integration-nodejs-03.png)
 
 1. Type <kbd>F1</kbd> then select "Azure API Center: Set active API Style Guide".
 
@@ -38,46 +43,64 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
 1. You can also choose the custom API style guide that reflects your organization's policies. This time choose `Select Local File` then select the `resources/rulesets/oas.yaml` file. You'll still see many yellow lines and red lines. Hover your mouse and see what needs to be fixed.
 
-   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-06.png)
+   ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-nodejs-06.png)
 
-1. Open `dotnet/src/ApiApp/Program.cs` and find the line:
+1. Open `nodejs/webapi/server.js`,
+    - Find the following code block:
 
-    ```csharp
-    // Add services to the container.
-    builder.Services.AddOpenApiService();
-    //builder.Services.AddImprovedOpenApiService();
+        ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        app.get("/api-docs/swagger.json", (req, res) => {
+        // res.send(swaggerSpecs.improved);
+        res.send(swaggerSpecs.basic);
+        });
+        ```
+
+    - Uncomment the line `res.send(swaggerSpecs.improved);`
+    - Comment out the line `res.send(swaggerSpecs.basic);`
+
+        ```javascript
+        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        app.get("/api-docs/swagger.json", (req, res) => {
+        res.send(swaggerSpecs.improved);
+        // res.send(swaggerSpecs.basic);
+        });
+        ```
+
+1. Then find the following code block:
+
+    ```javascript
+    // setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+    setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
     ```
 
-1. Comment out this line: `builder.Services.AddOpenApiService();`, and uncomment this line: `//builder.Services.AddImprovedOpenApiService();`.
-1. Find the line:
+    - Uncomment the line `// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");`
+    - Comment out the line `setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');`
 
-    ```csharp
-    // Add endpoint to the application.
-    app.UseWeatherForecastEndpoint(summaries);
-    //app.UseImprovedWeatherForecastEndpoint(summaries);
-    ```
+        ```javascript
+        setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+        // setupSwaggerUi(app, swaggerSpecs.basic, '/api-docs/swagger');
+        ```
 
-1. Comment out this line: `app.UseWeatherForecastEndpoint(summaries);`, and uncomment this line: `//app.UseImprovedWeatherForecastEndpoint(summaries);`.
-1. Run the sample app again.
+1. Run the sample app again. Ensure you are still in `nodejs/webapi`
 
-    ```bash
-    # .NET
-    dotnet watch run --project ./dotnet/src/ApiApp
+    ```javascript
+    npm start
     ```
 
    You'll see the following Swagger UI page.
 
-   ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-07.png)
+   ![Swagger UI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-07.png)
 
-1. Click `https://localhost:5051/swagger/v1.0.0/swagger.json` to see the OpenAPI document.
+1. Navigate to http://localhost:3030/api-docs/swagger.json to see the OpenAPI document.
 
-   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-08.png)
+   ![OpenAPI - weather forecast reviewed](./images/api-center-analyzer-integration-nodejs-08.png)
 
 1. Save the OpenAPI document to `weatherforecast-reviewed.json`.
 1. Stop the sample app by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 1. Open `weatherforecast-reviewed.json` in Visual Studio Code. You'll see all yellow lines and red lines disappeared.
 
-   ![Standalone API Analysis - reviewed analysis result](./images/api-center-analyzer-integration-09.png)
+   ![Standalone API Analysis - reviewed analysis result](./images/api-center-analyzer-integration-nodejs-09.png)
 
 ## Server-Side Analyzer through Azure Portal
 
@@ -116,11 +139,11 @@ To use this server-side analysis feature, you need to install the [APICenter Ana
 ### Server-Side Analysis by Registering API
 
 1. Register `weatherforecast.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
-1. Check the warnings and errors in the API Center.
+1. Check the warnings in the API Center.
 
-   ![Server-Side API Analysis](./images/api-center-analyzer-integration-10.png)
+   ![Server-Side API Analysis](./images/api-center-analyzer-integration-nodejs-10.png)
 
 1. Update existing API definition with `weatherforecast-reviewed.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
-1. Check the warnings and errors in the API Center.
+1. Check the warnings in the API Center.
 
-   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-11.png)
+   ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-nodejs-11.png)
