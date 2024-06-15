@@ -1,4 +1,4 @@
----
+<!-- ---
 page_type: sample
 languages:
 - azdeveloper
@@ -19,7 +19,7 @@ products:
 urlFragment: APICenter-Reference
 name: API Center Reference
 description: Let developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
----
+--- -->
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
 # API Center Reference
@@ -46,6 +46,8 @@ Throughout this reference sample, we'd like to give developer experiences how to
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?WT.mc_id=dotnet-134184-juyoo)
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli?WT.mc_id=dotnet-134184-juyoo) with [API Center extension](https://learn.microsoft.com/cli/azure/azure-cli-extensions-list?WT.mc_id=dotnet-134184-juyoo)
 - [GitHub CLI](https://cli.github.com)
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0?WT.mc_id=dotnet-134184-juyoo) or later
+- [node.js 18.x](https://nodejs.org/en/download/) or later
 
 ## Getting Started
 
