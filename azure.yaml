@@ -26,10 +26,10 @@ services:
           continueOnError: false
           interactive: true
           run: dotnet publish -c Release
-#   appservice-node:
-#     host: appservice
-#     language: js
-#     project: ./nodejs/src/api
+  appservice-node:
+    host: appservice
+    language: js
+    project: ./nodejs/webapi
   staticapp-dotnet:
     host: staticwebapp
     language: csharp

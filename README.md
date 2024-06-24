@@ -1,3 +1,27 @@
+<!-- ---
+page_type: sample
+languages:
+- azdeveloper
+- javascript
+- csharp
+- powershell
+- bash
+- html
+- bicep
+products:
+- azure
+- azure-api-center
+- azure-api-management
+- azure-app-service
+- azure-event-grid
+- azure-logic-apps
+- static-web-apps
+urlFragment: APICenter-Reference
+name: API Center Reference
+description: Let developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
+--- -->
+<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
+
 # API Center Reference
 
 Throughout this reference sample, we'd like to give developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
@@ -9,7 +33,7 @@ Throughout this reference sample, we'd like to give developer experiences how to
   - To perform shift-left API governance functionality in VS Code
   - To run APIC Analyzer for server-side linting
   - To manage custom metadata
-  - To handle events through Azure Event Grid and Logic Apps
+  <!-- - To handle events through Azure Event Grid and Logic Apps -->
 - API Discovery and Consumption
   - To integrate the client SDK in .NET & JavaScript
   - To prepare the server app scaffolding in .NET and JavaScript
@@ -22,6 +46,8 @@ Throughout this reference sample, we'd like to give developer experiences how to
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?WT.mc_id=dotnet-134184-juyoo)
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli?WT.mc_id=dotnet-134184-juyoo) with [API Center extension](https://learn.microsoft.com/cli/azure/azure-cli-extensions-list?WT.mc_id=dotnet-134184-juyoo)
 - [GitHub CLI](https://cli.github.com)
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0?WT.mc_id=dotnet-134184-juyoo) or later
+- [node.js 18.x](https://nodejs.org/en/download/) or later
 
 ## Getting Started
 
@@ -90,7 +116,8 @@ If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the
 
 There are several ways to integrate API Center with your solutions. You can choose the one that fits your needs.
 
-- [API Center Analyzer Integration](./docs/api-center-analyzer-integration.md)
+- [API Center Analyzer Integration - .NET](./docs/api-center-analyzer-integration-dotnet.md)
+- [API Center Analyzer Integration - JavaScript](./docs/api-center-analyzer-integration-nodejs.md)
 - [API Registration](./docs/api-registration.md)
 <!-- - [API Center Event Handler](./docs/api-center-event-handler.md) -->
 - [Custom Metadata Management](./docs/custom-metadata-management.md)
