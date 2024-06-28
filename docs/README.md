@@ -1,3 +1,27 @@
+---
+page_type: sample
+languages:
+- azdeveloper
+- javascript
+- csharp
+- powershell
+- bash
+- html
+- bicep
+products:
+- azure
+- azure-api-center
+- azure-api-management
+- azure-app-service
+- azure-event-grid
+- azure-logic-apps
+- static-web-apps
+urlFragment: APICenter-Reference
+name: API Center Reference
+description: Let developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
+---
+<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
+
 # API Center Reference
 
 Throughout this reference sample, we'd like to give developer experiences how to use API Center (APIC) and seamless integration with API Management (APIM), as well as inner-loop development velocity increase.
