@@ -1,7 +1,7 @@
 {
   "name": "webapi",
   "version": "0.0.0",
-  "description": "Sample API",
+  "description": "Express API",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -18,8 +18,6 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-generator": "^4.16.1",
-    "http-errors": "^2.0.0",
-    "jade": "^1.11.0",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
