@@ -45,11 +45,11 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
 
    ![Standalone API Analysis - analysis result](./images/api-center-analyzer-integration-nodejs-06.png)
 
-1. Open `nodejs/webapi/server.js`,
+1. Open `nodejs/webapi/app.js`,
     - Find the following code block:
 
         ```javascript
-        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        // route to serve basic/ improved JSON
         app.get("/api-docs/swagger.json", (req, res) => {
         // res.send(swaggerSpecs.improved);
         res.send(swaggerSpecs.basic);
@@ -60,7 +60,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
     - Comment out the line `res.send(swaggerSpecs.basic);`
 
         ```javascript
-        // route to serve basic/ improved JSON, Set up Swagger UI and redirect
+        // route to serve basic/ improved JSON
         app.get("/api-docs/swagger.json", (req, res) => {
         res.send(swaggerSpecs.improved);
         // res.send(swaggerSpecs.basic);
