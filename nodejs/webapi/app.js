@@ -53,17 +53,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/weatherforecast", weatherRouter);
 
-if (process.env.NODE_ENV !== 'production') {
-  // route to serve basic/ improved JSON
-  app.get("/api-docs/swagger.json", (req, res) => {
-    res.send(swaggerSpecs.basic);
-    // res.send(swaggerSpecs.improved);
-    
-  });
-  
-  setupSwaggerUi(app, swaggerSpecs.basic, "/api-docs/swagger");
-  // setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
-}
+// route to serve basic/ improved JSON
+app.get("/api-docs/swagger.json", (req, res) => {
+  // res.send(swaggerSpecs.improved);
+  res.send(swaggerSpecs.basic);
+});
+
+// setupSwaggerUi(app, swaggerSpecs.improved, "/api-docs/swagger");
+setupSwaggerUi(app, swaggerSpecs.basic, "/api-docs/swagger");
 
 app.get("/", (req, res) => {
   res.redirect("/weatherforecast");
