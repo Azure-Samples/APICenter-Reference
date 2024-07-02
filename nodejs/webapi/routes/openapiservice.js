@@ -54,7 +54,7 @@ const improvedSwaggerDefinition = {
     openapi: "3.0.1",
     info: {
       title: "Weather Forecast API",
-      description: description + "<br><br>An API that predicts upcoming weather", 
+      description: description, 
       version: "v1.0.0",
       contact: {
         name: "Contoso",
