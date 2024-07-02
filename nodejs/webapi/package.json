@@ -17,7 +17,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-generator": "^4.16.1",
+    "express-generator": "^4.2.0",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
