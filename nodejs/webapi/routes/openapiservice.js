@@ -28,7 +28,7 @@ const environment = process.env.NODE_ENV || "development";
 let description, apis;
 
 if (environment === "development") {
-  description = `${baseUrl}/api-docs/swagger.json`;
+  description = `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>`;
   apis = ["./app.js"];
 } else {
   description = "An API that predicts upcoming weather";
