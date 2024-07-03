@@ -42,7 +42,7 @@ const improvedSwaggerDefinition = {
     openapi: "3.0.1",
     info: {
       title: "Weather Forecast API",
-      description: `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>`, 
+      description: `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>. <br> An API that predicts upcoming weather.`,
       version: "v1.0.0",
       contact: {
         name: "Contoso",
