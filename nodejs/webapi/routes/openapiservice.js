@@ -19,21 +19,8 @@ function formatBaseUrl(port) {
   }
 }
 
-// Assuming `process.env.PORT` contains your port or named pipe value
 const portOrPipe = process.env.PORT || 3030; // Default to 3030 if not set
 const baseUrl = formatBaseUrl(portOrPipe);
-
-const environment = process.env.NODE_ENV || "development";
-
-let description, apis;
-
-if (environment === "development") {
-  description = `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>`;
-  apis = ["./app.js"];
-} else {
-  description = "An API that predicts upcoming weather";
-  apis = ["../app.js"];
-}
 
 // Basic swagger definition
 const basicSwaggerDefinition = {
@@ -41,11 +28,11 @@ const basicSwaggerDefinition = {
     openapi: "3.0.1",
     info: {
       title: "webapi",
-      description: description,
+      description: `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>`,
       version: "1.0",
     },
   },
-  apis: apis,
+  apis: ["./app.js"],
 };
 
 // Improved swagger definition
@@ -54,7 +41,7 @@ const improvedSwaggerDefinition = {
     openapi: "3.0.1",
     info: {
       title: "Weather Forecast API",
-      description: description, 
+      description: `<a href="${baseUrl}/api-docs/swagger.json" target="_blank">${baseUrl}/api-docs/swagger.json</a>`, 
       version: "v1.0.0",
       contact: {
         name: "Contoso",
@@ -74,7 +61,7 @@ const improvedSwaggerDefinition = {
       },
     ],
   },
-  apis: apis,
+  apis: ["./app.js"],
 };
 
 const swaggerSpecs = {
