@@ -39,20 +39,12 @@ You can create a client SDK from APIs registered on API Center using Visual Stud
 
     ![Web Application: Before data](./images/api-client-sdk-integration-javascript-06.png)
 
-1. Let's make a small modification to the code to make the client SDK work. Open `src/components/WeatherList.js` and uncomment the following line
+1. Let's make a small modification to the code to make the client SDK work. Open `src/components/WeatherList.js` and uncomment all the commented out code.
 
-    ```bash
-        <Box component="main" sx={{ flexGrow: 1, pl:30 }}>
-            <h1>Weather Forecast</h1>
-                {/* <WeatherList /> */}
-        </Box>
-    ```
+> [!NOTE]
+> This code sets up an anonymous authentication provider and a fetch request adapter to create a weather client. The `getWeatherForecast` function uses the client to fetch weather data from the API.
 
-1. Run the following command to run the web application.
-
-```bash
-cd nodejs/webapp & npm install
-```
+1. Refresh `localhost:3000` to load the weather data from your API in your web application.
 
 1. Open the browser and navigate to `https://localhost:3000`.
 1. You can see a table with weather forecast data from the WeatherForecast API.

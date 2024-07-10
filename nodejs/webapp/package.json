@@ -5,6 +5,12 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@microsoft/kiota-abstractions": "^1.0.0-preview.56",
+    "@microsoft/kiota-http-fetchlibrary": "^1.0.0-preview.55",
+    "@microsoft/kiota-serialization-form": "^1.0.0-preview.45",
+    "@microsoft/kiota-serialization-json": "^1.0.0-preview.56",
+    "@microsoft/kiota-serialization-multipart": "^1.0.0-preview.34",
+    "@microsoft/kiota-serialization-text": "^1.0.0-preview.53",
     "@mui/icons-material": "^5.16.0",
     "@mui/material": "^5.16.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -15,6 +21,13 @@
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsx": "^4.15.4"
+  },
+  "overrides": {
+    "typescript": "^5.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
