@@ -27,7 +27,19 @@ You can create a client SDK from APIs registered on API Center using Visual Stud
 
    ![Generated API Client](./images/api-client-sdk-integration-javascript-04.png)
 
-1. Let's make a small modification to the code to make the client SDK work. Open `src/pages/WeatherPage.js` and uncomment the following line
+## Run the WebApp
+
+1. While in the root of the project, run the following command to install the required packages and run the web application.
+
+    ```bash
+    cd nodejs/webapp && npm install && npm start
+    ```
+
+1. On `localhost:3000`, you will see the following UI, but when you navigate to the Weather page, you only see an empty table with no weather data.
+
+    ![Web Application: Before data](./images/api-client-sdk-integration-javascript-06.png)
+
+1. Let's make a small modification to the code to make the client SDK work. Open `src/components/WeatherList.js` and uncomment the following line
 
     ```bash
         <Box component="main" sx={{ flexGrow: 1, pl:30 }}>
