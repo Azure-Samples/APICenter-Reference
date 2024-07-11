@@ -34,13 +34,13 @@ $DEFINITIONs = @(
 )
 
 # Get the list of APIs registered in the API Center
-$API_IDs = az apic api list -g $RESOURCE_GROUP -s $APIC_NAME --query "[].name" | ConvertFrom-Json
+$API_IDs = az apic api list -g $RESOURCE_GROUP -n $APIC_NAME --query "[].name" | ConvertFrom-Json
 
 # Iterate over the APIs and import the API definitions
 $API_IDs | ForEach-Object {
     $API_ID = $_
-    $VERSION_ID = az apic api version list -g $RESOURCE_GROUP -s $APIC_NAME --api-id $API_ID --query "[].name" -o tsv
-    $DEFINITION_ID = az apic api definition list -g $RESOURCE_GROUP -s $APIC_NAME --api-id $API_ID --version-id $VERSION_ID --query "[].name" -o tsv
+    $VERSION_ID = az apic api version list -g $RESOURCE_GROUP -n $APIC_NAME --api-id $API_ID --query "[].name" -o tsv
+    $DEFINITION_ID = az apic api definition list -g $RESOURCE_GROUP -n $APIC_NAME --api-id $API_ID --version-id $VERSION_ID --query "[].name" -o tsv
 
     $DEFINITION = $DEFINITIONs | Where-Object { $_.id -eq $DEFINITION_ID }
     $SPECIFICATION = $DEFINITION.specification | ConvertTo-Json -Depth 100 -Compress | ConvertTo-Json
@@ -48,7 +48,7 @@ $API_IDs | ForEach-Object {
 
     az apic api definition import-specification `
         -g $RESOURCE_GROUP `
-        -s $APIC_NAME `
+        -n $APIC_NAME `
         --api-id $API_ID `
         --version-id $VERSION_ID `
         --definition-id $DEFINITION_ID `
@@ -59,11 +59,15 @@ $API_IDs | ForEach-Object {
 
 # Get the list of APIs registered in the API Management
 $APIM_NAME = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].name" -o tsv
-$API_IDs = az apim api list -g $RESOURCE_GROUP -n $APIM_NAME --query "[].id" | ConvertFrom-Json
+
+# Import APIs from API Management to API Center
+az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis *
+
+# $API_IDs = az apim api list -g $RESOURCE_GROUP -n $APIM_NAME --query "[].name" | ConvertFrom-Json
 
 # Iterate over the APIs and import the APIs from API Management to API Center
-$API_IDs | ForEach-Object {
-    $API_ID = $_
+# $API_IDs | ForEach-Object {
+#     $API_ID = $_
 
-    az apic service import-from-apim -g $RESOURCE_GROUP -s $APIC_NAME --source-resource-ids $API_ID
-}
+#     az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis $API_ID
+# }
