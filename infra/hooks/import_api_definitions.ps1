@@ -60,14 +60,14 @@ $API_IDs | ForEach-Object {
 # Get the list of APIs registered in the API Management
 $APIM_NAME = az resource list --namespace "Microsoft.ApiManagement" --resource-type "service" -g $RESOURCE_GROUP --query "[].name" -o tsv
 
-# Import APIs from API Management to API Center
-az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis *
+# # Import APIs from API Management to API Center
+# az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis *
 
-# $API_IDs = az apim api list -g $RESOURCE_GROUP -n $APIM_NAME --query "[].name" | ConvertFrom-Json
+$API_IDs = az apim api list -g $RESOURCE_GROUP -n $APIM_NAME --query "[].name" | ConvertFrom-Json
 
 # Iterate over the APIs and import the APIs from API Management to API Center
-# $API_IDs | ForEach-Object {
-#     $API_ID = $_
+$API_IDs | ForEach-Object {
+    $API_ID = $_
 
-#     az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis $API_ID
-# }
+    az apic import-from-apim -g $RESOURCE_GROUP -n $APIC_NAME --apim-name $APIM_NAME --apim-apis $API_ID
+}
