@@ -9,11 +9,11 @@ param apiCenterMetadataSchemaAssignedTo array
 param apiCenterMetadataSchema string
 
 // Create an API center service
-resource apiCenter 'Microsoft.ApiCenter/services@2024-03-01' existing = {
+resource apiCenter 'Microsoft.ApiCenter/services@2024-03-15-preview' existing = {
   name: apiCenterName
 }
 
-resource apiCenterMetadata 'Microsoft.ApiCenter/services/metadataSchemas@2024-03-01' = {
+resource apiCenterMetadata 'Microsoft.ApiCenter/services/metadataSchemas@2024-03-15-preview' = {
   name: apiCenterMetadataSchemaName
   parent: apiCenter
   properties: {

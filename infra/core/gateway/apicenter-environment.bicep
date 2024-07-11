@@ -29,7 +29,7 @@ param apiCenterEnvironmentKind string
 param apiCenterEnvironmentServerType string
 
 // Create an API Center service
-resource apic 'Microsoft.ApiCenter/services@2024-03-01' existing = {
+resource apic 'Microsoft.ApiCenter/services@2024-03-15-preview' existing = {
   name: apiCenterName
 }
 

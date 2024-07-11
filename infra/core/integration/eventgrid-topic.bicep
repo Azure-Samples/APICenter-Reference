@@ -7,7 +7,7 @@ param apiCenterName string
 
 param eventGridTopicName string
 
-resource apiCenter 'Microsoft.ApiCenter/services@2024-03-01' existing = {
+resource apiCenter 'Microsoft.ApiCenter/services@2024-03-15-preview' existing = {
   name: apiCenterName
 }
 
