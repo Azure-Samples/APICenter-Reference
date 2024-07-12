@@ -9,49 +9,49 @@ workflows:
       - azd: package --all
       - azd: deploy --all
 
-services:
-  appservice-dotnet:
-    host: appservice
-    language: csharp
-    project: ./dotnet/src/ApiApp
-    hooks:
-      prepackage:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release
-  appservice-node:
-    host: appservice
-    language: js
-    project: ./nodejs/webapi
-  staticapp-dotnet:
-    host: staticwebapp
-    language: csharp
-    project: ./dotnet/src/WebApp
-    dist: ./dotnet/publish/wwwroot
-    hooks:
-      prepackage:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
-#   staticapp-node:
-#     host: staticwebapp
+# services:
+#   appservice-dotnet:
+#     host: appservice
+#     language: csharp
+#     project: ./dotnet/src/ApiApp
+#     hooks:
+#       prepackage:
+#         posix:
+#           shell: sh
+#           continueOnError: false
+#           interactive: true
+#           run: dotnet publish -c Release
+#         windows:
+#           shell: pwsh
+#           continueOnError: false
+#           interactive: true
+#           run: dotnet publish -c Release
+#   appservice-node:
+#     host: appservice
 #     language: js
-#     project: ./nodejs/src/web
-#     dist: build
+#     project: ./nodejs/webapi
+#   staticapp-dotnet:
+#     host: staticwebapp
+#     language: csharp
+#     project: ./dotnet/src/WebApp
+#     dist: ./dotnet/publish/wwwroot
+#     hooks:
+#       prepackage:
+#         posix:
+#           shell: sh
+#           continueOnError: false
+#           interactive: true
+#           run: dotnet publish -c Release -o ./dotnet/publish
+#         windows:
+#           shell: pwsh
+#           continueOnError: false
+#           interactive: true
+#           run: dotnet publish -c Release -o ./dotnet/publish
+# #   staticapp-node:
+# #     host: staticwebapp
+# #     language: js
+# #     project: ./nodejs/src/web
+# #     dist: build
 
 hooks:
   preup:

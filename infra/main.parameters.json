@@ -8,15 +8,18 @@
     "location": {
       "value": "${AZURE_LOCATION}"
     },
+
     "apiCenterName": {
       "value": "${AZURE_API_CENTER}"
     },
+
     "logicAppsName": {
       "value": "${AZURE_LOGIC_APPS}"
     },
     "eventGridTopicName": {
       "value": "${AZURE_EVENT_GRID_TOPIC}"
     },
+
     "useApplicationInsights": {
       "value": "${USE_APPLICATION_INSIGHTS=true}"
     },
@@ -29,27 +32,14 @@
     "applicationInsightsDashboardName": {
       "value": "${AZURE_APPLICATION_INSIGHTS_DASHBOARD}"
     },
-    "appServicePlanName": {
-      "value": "${AZURE_APP_SERVICE_PLAN}"
+
+    "containerAppsEnvironmentName": {
+      "value": "${AZURE_CONTAINER_APPS_ENVIRONMENT}"
     },
-    "appServiceSkuName": {
-      "value": "${AZURE_APP_SERVICE_SKU=B1}"
+    "containerRegistryName": {
+      "value": "${AZURE_CONTAINER_REGISTRY}"
     },
-    "appServiceNodeName": {
-      "value": "${AZURE_APP_SERVICE_NODE}"
-    },
-    "appServiceDotNetName": {
-      "value": "${AZURE_APP_SERVICE_DOTNET}"
-    },
-    "staticAppSkuName": {
-      "value": "${AZURE_STATIC_APP_SKU=Free}"
-    },
-    "staticAppNodeName": {
-      "value": "${AZURE_STATIC_APP_NODE}"
-    },
-    "staticAppDotNetName": {
-      "value": "${AZURE_STATIC_APP_DOTNET}"
-    },
+
     "apiManagementName": {
       "value": "${AZURE_API_MANAGEMENT}"
     },
