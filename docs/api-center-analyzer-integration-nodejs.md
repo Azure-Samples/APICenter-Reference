@@ -25,7 +25,7 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
     npm start
     ```
 
-   You'll see the following Swagger UI page.
+   Navigate to http://localhost:3030/api-docs/swagger to view the Swagger UI page.
 
    ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
