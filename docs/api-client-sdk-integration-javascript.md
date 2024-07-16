@@ -50,3 +50,7 @@ You can create a client SDK from APIs registered on API Center using Visual Stud
 1. You can see a table with weather forecast data from the WeatherForecast API.
 
    ![Web Application: Weather Forecast API](./images/api-client-sdk-integration-javascript-05.png)
+
+> [!NOTE]
+> In case you run into the error below, navigate to `webapp/src/weatherClient.ts`, locate line `import { type WeatherforecastRequestBuilder, WeatherforecastRequestBuilderRequestsMetadata } from './weatherforecast/index.ts';` and change `/index.js` to `index.ts`
+> ![Web Application: Weather Forecast API](./images/api-client-sdk-integration-javascript-07.png)

@@ -20,11 +20,11 @@ import './WeatherList.css';
 // }
 
 export const WeatherList = () => {
-  // const [weather, setWeather] = React.useState([]);
+//   const [weather, setWeather] = React.useState([]);
 
-  // React.useEffect(() => {
-  //     getWeatherForecast().then((weather) => setWeather(weather));
-  // }, []);
+//   React.useEffect(() => {
+//       getWeatherForecast().then((weather) => setWeather(weather));
+//   }, []);
 
   return (
       <div>
