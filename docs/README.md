@@ -10,7 +10,6 @@ languages:
 - bicep
 products:
 - azure
-- azure-api-center
 - azure-api-management
 - azure-app-service
 - azure-event-grid
