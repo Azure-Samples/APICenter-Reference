@@ -59,7 +59,7 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     # Install the APIC Analyzer
     Write-Host "About to install the APIC Analyzer..."
 
-    # & "$REPOSITORY_ROOT/infra/hooks/install_apic_analyzer.ps1"
+    & "$REPOSITORY_ROOT/infra/hooks/install_apic_analyzer.ps1"
 } else {
     Write-Host "Skipping to install the APIC Analyzer..."
 }
