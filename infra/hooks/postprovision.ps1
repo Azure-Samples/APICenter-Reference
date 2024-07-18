@@ -69,9 +69,9 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     # Install the APIC Portal
     Write-Host "About to install the APIC Portal..."
 
-    azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$($AZURE_ENV_NAME)-portal"
+    # azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$($AZURE_ENV_NAME)-portal"
 
-    & "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.ps1"
+    # & "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.ps1"
 } else {
     Write-Host "Skipping to install the APIC Portal..."
 }

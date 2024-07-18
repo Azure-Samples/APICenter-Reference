@@ -38,12 +38,13 @@ param useApplicationInsights bool = false // Set in main.parameters.json
 param logAnalyticsName string = '' // Set in main.parameters.json
 param applicationInsightsName string = '' // Set in main.parameters.json
 param applicationInsightsDashboardName string = '' // Set in main.parameters.json
-param diagnosticsSettingsName string = ''
 
-param appServicePlanName string = '' // Set in main.parameters.json
-param appServiceSkuName string // Set in main.parameters.json
-param appServiceNodeName string = '' // Set in main.parameters.json
-param appServiceDotNetName string = '' // Set in main.parameters.json
+@description('Hostname suffix for container registry. Set when deploying to sovereign clouds')
+param containerRegistryHostSuffix string = 'azurecr.io'
+param containerAppsEnvironmentName string = '' // Set in main.parameters.json
+param containerRegistryName string = '' // Set in main.parameters.json
+param apiAppExists bool = false
+param webAppExists bool = false
 
 // Limited to the following locations due to the availability of Static Web Apps
 @minLength(1)
@@ -61,9 +62,6 @@ param appServiceDotNetName string = '' // Set in main.parameters.json
   }
 })
 param staticAppLocation string
-param staticAppSkuName string // Set in main.parameters.json
-param staticAppNodeName string = '' // Set in main.parameters.json
-param staticAppDotNetName string = '' // Set in main.parameters.json
 
 param apiManagementName string = '' // Set in main.parameters.json
 param apiManagementPublisherName string // Set in main.parameters.json
@@ -216,85 +214,84 @@ module monitoring './core/monitor/monitoring.bicep' = if (useApplicationInsights
   }
 }
 
-// Provision an App Service Plan to group applications under the same payment plan and SKU
-module appServicePlan 'core/host/appserviceplan.bicep' = {
-  name: 'appserviceplan'
+// Provision container apps
+module containerApps './core/host/container-apps.bicep' = {
+  name: 'container-apps'
   scope: rg
   params: {
-    name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}-reference'
+    name: 'app'
     location: location
     tags: tags
-    sku: {
-      name: appServiceSkuName
-      capacity: 1
-    }
-    kind: 'app'
-    reserved: false
+    containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
+    containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
+    // Work around Azure/azure-dev#3157 (the root cause of which is Azure/acr#723) by explicitly enabling the admin user to allow users which
+    // don't have the `Owner` role granted (and instead are classic administrators) to access the registry to push even if AAD authentication fails.
+    //
+    // This addresses the following error during deploy:
+    //
+    // failed getting ACR token: POST https://<some-random-name>.azurecr.io/oauth2/exchange 401 Unauthorized
+    containerRegistryAdminUserEnabled: true
+    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
   }
 }
 
-var apps = [
+var apiapps = [
   {
     name: 'node'
-    webInstanceName: appServiceNodeName
-    staticInstanceName: staticAppNodeName
-    runtimeName: 'node'
-    runtimeVersion: '18-lts'
+    exists: apiAppExists
   }
   {
     name: 'dotnet'
-    webInstanceName: appServiceDotNetName
-    staticInstanceName: staticAppDotNetName
-    runtimeName: 'dotnetcore'
-    runtimeVersion: '8.0'
+    exists: apiAppExists
   }
 ]
 
-// Provision App Services for each application
-module appServices './core/host/appservice.bicep' = [for app in apps: {
-  name: 'appservice-${app.name}'
+// Provision backend APIs
+module apiApps './apps/api.bicep' = [for apiapp in apiapps: {
+  name: 'api-${apiapp.name}'
   scope: rg
   params: {
-    name: !empty(app.webInstanceName) ? app.webInstanceName : '${abbrs.webSitesAppService}${resourceToken}-${app.name}-reference'
+    name: '${abbrs.appContainerApps}${resourceToken}-api-${apiapp.name}'
     location: location
-    tags: union(tags, { 'azd-service-name': 'appservice-${app.name}' })
-    kind: 'api'
-    appServicePlanId: appServicePlan.outputs.id
-    runtimeName: app.runtimeName
-    runtimeVersion: app.runtimeVersion
-    managedIdentity: true
-    use32BitWorkerProcess: appServiceSkuName == 'F1'
-    alwaysOn: appServiceSkuName != 'F1'
-    appSettings: {
-      APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? monitoring.outputs.applicationInsightsConnectionString : ''
-    }
+    tags: union(tags, { 'azd-service-name': 'containerapp-api-${apiapp.name}' })
+    deploymentNameSuffix: apiapp.name
+    identityName: '${abbrs.managedIdentityUserAssignedIdentities}${resourceToken}-api-${apiapp.name}'
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    containerAppsEnvironmentName: containerApps.outputs.environmentName
+    containerRegistryName: containerApps.outputs.registryName
+    containerRegistryHostSuffix: containerRegistryHostSuffix
+    corsAcaUrl: 'https://${abbrs.appContainerApps}${resourceToken}-web-${apiapp.name}.${containerApps.outputs.defaultDomain}'
+    exists: apiapp.exists
   }
 }]
 
-// Integrate Diagnostics settings
-module diagnostics './core/monitor/appservice-diagnosticsettings.bicep' = [for (app, i) in apps: if (useApplicationInsights) {
-  name: 'diagnostics-${app.name}'
-  scope: rg
-  params: {
-    name: !empty(diagnosticsSettingsName) ? '${diagnosticsSettingsName}-${app.name}' : 'diag-${resourceToken}-${app.name}'
-    logAnalyticsName: monitoring.outputs.logAnalyticsWorkspaceName
-    appServiceName: appServices[i].outputs.name
-    kind: 'appservice'
+var webapps = [
+  {
+    name: 'node'
+    exists: webAppExists
   }
-}]
+  {
+    name: 'dotnet'
+    exists: webAppExists
+  }
+]
 
-// Provision Static Web Apps for each application
-module staticApps './core/host/staticwebapp.bicep' = [for app in apps: {
-  name: 'staticapp-${app.name}'
+// Provision frontend apps
+module webApps './apps/web.bicep' = [for webapp in webapps: {
+  name: 'web-${webapp.name}'
   scope: rg
   params: {
-    name: !empty(app.staticInstanceName) ? app.staticInstanceName : '${abbrs.webStaticSites}${resourceToken}-${app.name}-reference'
-    location: staticAppLocation
-    tags: union(tags, { 'azd-service-name': 'staticapp-${app.name}' })
-    sku: {
-      name: staticAppSkuName
-      tier: staticAppSkuName
-    }
+    name: '${abbrs.appContainerApps}${resourceToken}-web-${webapp.name}'
+    location: location
+    tags: union(tags, { 'azd-service-name': 'containerapp-web-${webapp.name}' })
+    deploymentNameSuffix: webapp.name
+    identityName: '${abbrs.managedIdentityUserAssignedIdentities}${resourceToken}-web-${webapp.name}'
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    containerAppsEnvironmentName: containerApps.outputs.environmentName
+    containerRegistryName: containerApps.outputs.registryName
+    containerRegistryHostSuffix: containerRegistryHostSuffix
+    exists: webapp.exists
   }
 }]
 
@@ -471,16 +468,10 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_API_CENTER string = apiCenter.outputs.name
 output AZURE_API_CENTER_LOCATION string = apiCenter.outputs.location
 
-output AZURE_APP_SERVICE_LOCATION string = appServices[0].outputs.location
-output AZURE_APP_SERVICE_NODE string = appServices[0].outputs.name
-output AZURE_APP_SERVICE_NODE_URL string = appServices[0].outputs.uri
-output AZURE_APP_SERVICE_DOTNET string = appServices[1].outputs.name
-output AZURE_APP_SERVICE_DOTNET_URL string = appServices[1].outputs.uri
-
-output AZURE_STATIC_APP_LOCATION string = staticApps[0].outputs.location
-output AZURE_STATIC_APP_NODE string = staticApps[0].outputs.name
-output AZURE_STATIC_APP_NODE_URL string = staticApps[0].outputs.uri
-output AZURE_STATIC_APP_DOTNET string = staticApps[1].outputs.name
-output AZURE_STATIC_APP_DOTNET_URL string = staticApps[1].outputs.uri
+output AZURE_STATIC_APP_LOCATION string = staticAppLocation
 
 output AZURE_API_MANAGEMENT string = apiManagement.outputs.name
+
+output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
+output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName

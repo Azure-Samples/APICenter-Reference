@@ -1,5 +1,5 @@
 ﻿@page "/"
-@using WebApp.UI
+@using WebApp.Components.UI
 
 <PageTitle>Home</PageTitle>
 
@@ -7,4 +7,4 @@
 
 Welcome to your new app.
 
-<AvailablePetsComponent />
+<AvailablePetsComponent @rendermode="InteractiveServer" />

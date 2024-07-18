@@ -10,48 +10,23 @@ workflows:
       - azd: deploy --all
 
 services:
-  appservice-dotnet:
-    host: appservice
+  containerapp-api-dotnet:
+    host: containerapp
     language: csharp
     project: ./dotnet/src/ApiApp
-    hooks:
-      prepackage:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release
-  appservice-node:
-    host: appservice
-    language: js
-    project: ./nodejs/webapi
-  staticapp-dotnet:
-    host: staticwebapp
+  containerapp-web-dotnet:
+    host: containerapp
     language: csharp
     project: ./dotnet/src/WebApp
-    dist: ./dotnet/publish/wwwroot
-    hooks:
-      prepackage:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: dotnet publish -c Release -o ./dotnet/publish
-#   staticapp-node:
-#     host: staticwebapp
-#     language: js
-#     project: ./nodejs/src/web
-#     dist: build
+  containerapp-api-node:
+    host: containerapp
+    language: js
+    project: ./nodejs/webapi
+  # containerapp-web-node:
+  #   host: containerapp
+  #   language: js
+  #   project: ./nodejs/src/web
+  #   dist: build
 
 hooks:
   preup:
