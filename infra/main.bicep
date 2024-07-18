@@ -38,7 +38,6 @@ param useApplicationInsights bool = false // Set in main.parameters.json
 param logAnalyticsName string = '' // Set in main.parameters.json
 param applicationInsightsName string = '' // Set in main.parameters.json
 param applicationInsightsDashboardName string = '' // Set in main.parameters.json
-// param diagnosticsSettingsName string = ''
 
 @description('Hostname suffix for container registry. Set when deploying to sovereign clouds')
 param containerRegistryHostSuffix string = 'azurecr.io'
@@ -47,30 +46,22 @@ param containerRegistryName string = '' // Set in main.parameters.json
 param apiAppExists bool = false
 param webAppExists bool = false
 
-// param appServicePlanName string = '' // Set in main.parameters.json
-// param appServiceSkuName string // Set in main.parameters.json
-// param appServiceNodeName string = '' // Set in main.parameters.json
-// param appServiceDotNetName string = '' // Set in main.parameters.json
-
-// // Limited to the following locations due to the availability of Static Web Apps
-// @minLength(1)
-// @description('Location for Static Web Apps')
-// @allowed([
-//   'centralus'
-//   'eastasia'
-//   'eastus2'
-//   'westeurope'
-//   'westus2'
-// ])
-// @metadata({
-//   azd: {
-//     type: 'location'
-//   }
-// })
-// param staticAppLocation string
-// param staticAppSkuName string // Set in main.parameters.json
-// param staticAppNodeName string = '' // Set in main.parameters.json
-// param staticAppDotNetName string = '' // Set in main.parameters.json
+// Limited to the following locations due to the availability of Static Web Apps
+@minLength(1)
+@description('Location for Static Web Apps')
+@allowed([
+  'centralus'
+  'eastasia'
+  'eastus2'
+  'westeurope'
+  'westus2'
+])
+@metadata({
+  azd: {
+    type: 'location'
+  }
+})
+param staticAppLocation string
 
 param apiManagementName string = '' // Set in main.parameters.json
 param apiManagementPublisherName string // Set in main.parameters.json
@@ -249,12 +240,10 @@ var apiapps = [
   {
     name: 'node'
     exists: apiAppExists
-    targetPort: 3000
   }
   {
     name: 'dotnet'
     exists: apiAppExists
-    targetPort: 5050
   }
 ]
 
@@ -265,7 +254,7 @@ module apiApps './apps/api.bicep' = [for apiapp in apiapps: {
   params: {
     name: '${abbrs.appContainerApps}${resourceToken}-api-${apiapp.name}'
     location: location
-    tags: tags
+    tags: union(tags, { 'azd-service-name': 'containerapp-api-${apiapp.name}' })
     deploymentNameSuffix: apiapp.name
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}${resourceToken}-api-${apiapp.name}'
     applicationInsightsName: monitoring.outputs.applicationInsightsName
@@ -274,7 +263,6 @@ module apiApps './apps/api.bicep' = [for apiapp in apiapps: {
     containerRegistryHostSuffix: containerRegistryHostSuffix
     corsAcaUrl: 'https://${abbrs.appContainerApps}${resourceToken}-web-${apiapp.name}.${containerApps.outputs.defaultDomain}'
     exists: apiapp.exists
-    targetPort: apiapp.targetPort
   }
 }]
 
@@ -282,12 +270,10 @@ var webapps = [
   {
     name: 'node'
     exists: webAppExists
-    targetPort: 3000
   }
   {
     name: 'dotnet'
     exists: webAppExists
-    targetPort: 5000
   }
 ]
 
@@ -298,7 +284,7 @@ module webApps './apps/web.bicep' = [for webapp in webapps: {
   params: {
     name: '${abbrs.appContainerApps}${resourceToken}-web-${webapp.name}'
     location: location
-    tags: tags
+    tags: union(tags, { 'azd-service-name': 'containerapp-web-${webapp.name}' })
     deploymentNameSuffix: webapp.name
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}${resourceToken}-web-${webapp.name}'
     applicationInsightsName: monitoring.outputs.applicationInsightsName
@@ -306,91 +292,8 @@ module webApps './apps/web.bicep' = [for webapp in webapps: {
     containerRegistryName: containerApps.outputs.registryName
     containerRegistryHostSuffix: containerRegistryHostSuffix
     exists: webapp.exists
-    targetPort: webapp.targetPort
   }
 }]
-
-// // Provision an App Service Plan to group applications under the same payment plan and SKU
-// module appServicePlan 'core/host/appserviceplan.bicep' = {
-//   name: 'appserviceplan'
-//   scope: rg
-//   params: {
-//     name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}-reference'
-//     location: location
-//     tags: tags
-//     sku: {
-//       name: appServiceSkuName
-//       capacity: 1
-//     }
-//     kind: 'app'
-//     reserved: false
-//   }
-// }
-
-// var apps = [
-//   {
-//     name: 'node'
-//     webInstanceName: appServiceNodeName
-//     staticInstanceName: staticAppNodeName
-//     runtimeName: 'node'
-//     runtimeVersion: '18-lts'
-//   }
-//   {
-//     name: 'dotnet'
-//     webInstanceName: appServiceDotNetName
-//     staticInstanceName: staticAppDotNetName
-//     runtimeName: 'dotnetcore'
-//     runtimeVersion: '8.0'
-//   }
-// ]
-
-// // Provision App Services for each application
-// module appServices './core/host/appservice.bicep' = [for app in apps: {
-//   name: 'appservice-${app.name}'
-//   scope: rg
-//   params: {
-//     name: !empty(app.webInstanceName) ? app.webInstanceName : '${abbrs.webSitesAppService}${resourceToken}-${app.name}-reference'
-//     location: location
-//     tags: union(tags, { 'azd-service-name': 'appservice-${app.name}' })
-//     kind: 'api'
-//     appServicePlanId: appServicePlan.outputs.id
-//     runtimeName: app.runtimeName
-//     runtimeVersion: app.runtimeVersion
-//     managedIdentity: true
-//     use32BitWorkerProcess: appServiceSkuName == 'F1'
-//     alwaysOn: appServiceSkuName != 'F1'
-//     appSettings: {
-//       APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? monitoring.outputs.applicationInsightsConnectionString : ''
-//     }
-//   }
-// }]
-
-// // Integrate Diagnostics settings
-// module diagnostics './core/monitor/appservice-diagnosticsettings.bicep' = [for (app, i) in apps: if (useApplicationInsights) {
-//   name: 'diagnostics-${app.name}'
-//   scope: rg
-//   params: {
-//     name: !empty(diagnosticsSettingsName) ? '${diagnosticsSettingsName}-${app.name}' : 'diag-${resourceToken}-${app.name}'
-//     logAnalyticsName: monitoring.outputs.logAnalyticsWorkspaceName
-//     appServiceName: appServices[i].outputs.name
-//     kind: 'appservice'
-//   }
-// }]
-
-// // Provision Static Web Apps for each application
-// module staticApps './core/host/staticwebapp.bicep' = [for app in apps: {
-//   name: 'staticapp-${app.name}'
-//   scope: rg
-//   params: {
-//     name: !empty(app.staticInstanceName) ? app.staticInstanceName : '${abbrs.webStaticSites}${resourceToken}-${app.name}-reference'
-//     location: staticAppLocation
-//     tags: union(tags, { 'azd-service-name': 'staticapp-${app.name}' })
-//     sku: {
-//       name: staticAppSkuName
-//       tier: staticAppSkuName
-//     }
-//   }
-// }]
 
 var apicEnvironments = [
   {
@@ -565,16 +468,10 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_API_CENTER string = apiCenter.outputs.name
 output AZURE_API_CENTER_LOCATION string = apiCenter.outputs.location
 
-// output AZURE_APP_SERVICE_LOCATION string = appServices[0].outputs.location
-// output AZURE_APP_SERVICE_NODE string = appServices[0].outputs.name
-// output AZURE_APP_SERVICE_NODE_URL string = appServices[0].outputs.uri
-// output AZURE_APP_SERVICE_DOTNET string = appServices[1].outputs.name
-// output AZURE_APP_SERVICE_DOTNET_URL string = appServices[1].outputs.uri
-
-// output AZURE_STATIC_APP_LOCATION string = staticApps[0].outputs.location
-// output AZURE_STATIC_APP_NODE string = staticApps[0].outputs.name
-// output AZURE_STATIC_APP_NODE_URL string = staticApps[0].outputs.uri
-// output AZURE_STATIC_APP_DOTNET string = staticApps[1].outputs.name
-// output AZURE_STATIC_APP_DOTNET_URL string = staticApps[1].outputs.uri
+output AZURE_STATIC_APP_LOCATION string = staticAppLocation
 
 output AZURE_API_MANAGEMENT string = apiManagement.outputs.name
+
+output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
+output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
