@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6FF202E5-B66
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiApp", "src\ApiApp\ApiApp.csproj", "{7C52F054-84F7-4B72-9C62-F66AC039E800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "src\WebApp\WebApp.csproj", "{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "src\WebApp\WebApp.csproj", "{B0EB9EBF-1226-43D2-B499-CD229ACA219C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,17 +19,17 @@ Global
 		{7C52F054-84F7-4B72-9C62-F66AC039E800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C52F054-84F7-4B72-9C62-F66AC039E800}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C52F054-84F7-4B72-9C62-F66AC039E800}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0EB9EBF-1226-43D2-B499-CD229ACA219C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0EB9EBF-1226-43D2-B499-CD229ACA219C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0EB9EBF-1226-43D2-B499-CD229ACA219C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0EB9EBF-1226-43D2-B499-CD229ACA219C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7C52F054-84F7-4B72-9C62-F66AC039E800} = {6FF202E5-B660-454E-9EF4-78855241C703}
-		{5B5A7DC2-222B-4BBB-BAE6-96BF0ED051C6} = {6FF202E5-B660-454E-9EF4-78855241C703}
+		{B0EB9EBF-1226-43D2-B499-CD229ACA219C} = {6FF202E5-B660-454E-9EF4-78855241C703}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {616B42B0-6B21-4954-B21D-BEF0F3C827E5}
