@@ -116,13 +116,14 @@ If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the
 
 There are several ways to integrate API Center with your solutions. You can choose the one that fits your needs.
 
-- [API Center Analyzer Integration - .NET](./docs/api-center-analyzer-integration-dotnet.md)
-- [API Center Analyzer Integration - JavaScript](./docs/api-center-analyzer-integration-nodejs.md)
-- [API Registration](./docs/api-registration.md)
+- [API Center Analyzer Integration - .NET](./api-center-analyzer-integration-dotnet.md)
+- [API Center Analyzer Integration - JavaScript](./api-center-analyzer-integration-nodejs.md)
+- [API Registration](./api-registration.md)
 <!-- - [API Center Event Handler](./docs/api-center-event-handler.md) -->
-- [Custom Metadata Management](./docs/custom-metadata-management.md)
-- [API Center Portal Integration](./docs/api-center-portal-integration.md)
-- [API Client SDK Integration](./docs/api-client-sdk-integration.md)
+- [Custom Metadata Management](./custom-metadata-management.md)
+- [API Center Portal Integration](./api-center-portal-integration.md)
+- [API Client SDK Integration - .NET](./api-client-sdk-integration-dotnet.md)
+- [API Client SDK Integration - JavaScript](./api-client-sdk-integration-nodejs.md)
 
 ## Resources
 
