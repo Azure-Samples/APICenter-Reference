@@ -2,6 +2,9 @@
 
 name: apicenter-reference
 
+metadata:
+  template: api-center-reference
+
 workflows:
   up: 
     steps:
