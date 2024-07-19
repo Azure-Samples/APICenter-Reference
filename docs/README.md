@@ -72,19 +72,19 @@ Provisioning and deploying all the resources are as easy as running a few comman
 
 1. After the deployment is completed, navigate to Azure Portal and find the API Center instance. Then, you'll see all the APIs registered.
 
-   ![APIs registered on API Center](./docs/images/getting-started-01.png)
+   ![APIs registered on API Center](./images/getting-started-01.png)
 
 1. Navigate to the API Analysis blade and see the analysis results.
 
-   ![API Analysis](./docs/images/getting-started-02.png)
+   ![API Analysis](./images/getting-started-02.png)
 
 1. Find the Azure Static Web App instance name ending with `-portal` and open the app to see the API Center portal.
 
-   ![API Center Portal](./docs/images/getting-started-03.png)
+   ![API Center Portal](./images/getting-started-03.png)
 
 1. Login to the portal and you'll see all the APIs registered to the API Center.
 
-   ![API Center Portal](./docs/images/getting-started-04.png)
+   ![API Center Portal](./images/getting-started-04.png)
 
 ## CI/CD Pipeline Integration
 
