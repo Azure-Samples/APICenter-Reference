@@ -98,7 +98,8 @@ There are several ways to integrate API Center with your solutions. You can choo
 <!-- - [API Center Event Handler](./docs/api-center-event-handler.md) -->
 - [Custom Metadata Management](./docs/custom-metadata-management.md)
 - [API Center Portal Integration](./docs/api-center-portal-integration.md)
-- [API Client SDK Integration](./docs/api-client-sdk-integration.md)
+- [API Client SDK Integration - .NET](./docs/api-client-sdk-integration-dotnet.md)
+- [API Client SDK Integration - JavaScript](./docs/api-client-sdk-integration-nodejs.md)
 
 ## Resources
 
