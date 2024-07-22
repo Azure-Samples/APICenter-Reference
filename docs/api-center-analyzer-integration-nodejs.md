@@ -13,13 +13,19 @@ You can analyze your API documents using Visual Studio Code (Standalone) or Azur
     cd nodejs/webapi && npm install
     ```
 
+1. Install dependencies.
+
+     ```javascript
+    cd nodejs/webapi && npm install
+    ```
+
 1. Run the sample app.
 
     ```javascript
     npm start
     ```
 
-   You'll see the following Swagger UI page.
+   Navigate to http://localhost:3030/api-docs/swagger to view the Swagger UI page.
 
    ![Swagger UI - weather forecast](./images/api-center-analyzer-integration-nodejs-01.png)
 
@@ -140,10 +146,13 @@ To use this server-side analysis feature, you need to install the [APICenter Ana
 
 1. Register `weatherforecast.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
 1. Check the warnings in the API Center.
+1. Check the warnings in the API Center.
 
+   ![Server-Side API Analysis](./images/api-center-analyzer-integration-nodejs-10.png)
    ![Server-Side API Analysis](./images/api-center-analyzer-integration-nodejs-10.png)
 
 1. Update existing API definition with `weatherforecast-reviewed.json` to API Center through Azure Portal or through this document, [API Registration](./api-registration.md).
+1. Check the warnings in the API Center.
 1. Check the warnings in the API Center.
 
    ![Server-Side API Analysis - reviewed](./images/api-center-analyzer-integration-nodejs-11.png)
