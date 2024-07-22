@@ -25,11 +25,10 @@ services:
     host: containerapp
     language: js
     project: ./nodejs/webapi
-  # containerapp-web-node:
-  #   host: containerapp
-  #   language: js
-  #   project: ./nodejs/src/web
-  #   dist: build
+  containerapp-web-node:
+    host: containerapp
+    language: js
+    project: ./nodejs/webapp
 
 hooks:
   preup:
