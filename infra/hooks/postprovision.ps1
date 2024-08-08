@@ -39,6 +39,8 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     $objectId = az ad app show --id $appId --query "id" -o tsv
 
     # Add required permissions to the app
+    # ResourceAppId for Azure API Center: "c3ca1a77-7a87-4dba-b8f8-eea115ae4573"
+    # Scope for User Impersonation: "44327351-3395-414e-882e-7aa4a9c3b25d"
     $requiredResourceAccess = @( @{ resourceAppId = "c3ca1a77-7a87-4dba-b8f8-eea115ae4573"; resourceAccess = @( @{ type = "Scope"; id = "44327351-3395-414e-882e-7aa4a9c3b25d" } ) } )
 
     $payload = @{ requiredResourceAccess = $requiredResourceAccess; } | ConvertTo-Json -Depth 100 -Compress | ConvertTo-Json
@@ -69,9 +71,9 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     # Install the APIC Portal
     Write-Host "About to install the APIC Portal..."
 
-    # azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$($AZURE_ENV_NAME)-portal"
+    azd env set AZURE_API_CENTER_PORTAL_DIRECTORY "$($AZURE_ENV_NAME)-portal"
 
-    # & "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.ps1"
+    & "$REPOSITORY_ROOT/infra/hooks/install_apic_portal.ps1"
 } else {
     Write-Host "Skipping to install the APIC Portal..."
 }
