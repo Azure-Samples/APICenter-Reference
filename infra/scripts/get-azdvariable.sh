@@ -47,7 +47,7 @@ while [[ "$1" != "" ]]; do
 done
 
 if [ -z "$KEY" ]; then
-    echo -e "\e[36m    Key is required.\e[0m"
+    echo -e "\033[0;36m    Key is required.\033[0m"
     echo ""
 
     usage
