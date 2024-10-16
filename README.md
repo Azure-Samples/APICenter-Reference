@@ -66,10 +66,10 @@ Provisioning and deploying all the resources are as easy as running a few comman
 1. If you want to see how APIs registered in API Center are integrated with the existing applications, run the following command to deploy both .NET apps and node.js apps to Azure.
 
     ```bash
-    azd deploy --all
+    azd deploy
     ```
 
-1. If you want to run both `azd provision` and `azd deploy --all` in one go, run the following command:
+1. If you want to run both `azd provision` and `azd deploy` in one go, run the following command:
 
     ```bash
     azd up
