@@ -24,7 +24,7 @@ while [[ "$1" != "" ]]; do
 done
 
 if [[ $SHOW_MESSAGE == true ]]; then
-    echo -e "\e[36mLoading azd .env file from current environment...\e[0m"
+    echo -e "\033[0;36mLoading azd .env file from current environment...\033[0m"
 fi
 
 while IFS='=' read -r key value; do

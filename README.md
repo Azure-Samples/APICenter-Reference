@@ -41,10 +41,10 @@ Provisioning and deploying all the resources are as easy as running a few comman
     az login
     ```
 
-1. Run `azd up` to provision all the resources to Azure and deploy the code to those resources.
+1. Run `azd provision` to provision all the resources to Azure and deploy the code to those resources.
 
     ```bash
-    azd up
+    azd provision
     ```
 
 1. After the deployment is completed, navigate to Azure Portal and find the API Center instance. Then, you'll see all the APIs registered.
@@ -63,6 +63,18 @@ Provisioning and deploying all the resources are as easy as running a few comman
 
    ![API Center Portal](./docs/images/getting-started-04.png)
 
+1. If you want to see how APIs registered in API Center are integrated with the existing applications, run the following command to deploy both .NET apps and node.js apps to Azure.
+
+    ```bash
+    azd deploy
+    ```
+
+1. If you want to run both `azd provision` and `azd deploy` in one go, run the following command:
+
+    ```bash
+    azd up
+    ```
+
 ## CI/CD Pipeline Integration
 
 If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the following command to create a GitHub repository and push the code to the repository.
@@ -77,16 +89,26 @@ If you want to integrate the CI/CD pipeline with GitHub Actions, you can use the
 1. Run the following commands to update your GitHub repository variables.
 
     ```bash
-    # Bash
+    # bash/zsh
     AZURE_CLIENT_ID=$(./infra/scripts/get-azdvariable.sh --key AZURE_CLIENT_ID)
     azd pipeline config --principal-id $AZURE_CLIENT_ID
-    
+    ```
+
+    ```powershell
     # PowerShell
     $AZURE_CLIENT_ID = $(./infra/scripts/Get-AzdVariable.ps1 -Key AZURE_CLIENT_ID)
     azd pipeline config --principal-id $AZURE_CLIENT_ID
     ```
 
 1. Now, you're good to go! Push the code to the GitHub repository or manually run the GitHub Actions workflow to get your portal deployed.
+
+## Clean Up Resources
+
+Once you complete playing around with the resources, you can clean up all the resources provisioned by running the following command to avoid unnecessary cost shock.
+
+```bash
+azd down --purge --force
+```
 
 ## Other Integrations
 

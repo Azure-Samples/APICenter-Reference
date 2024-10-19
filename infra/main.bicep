@@ -240,10 +240,12 @@ var apiapps = [
   {
     name: 'node'
     exists: apiAppExists
+    targetPort: 3030
   }
   {
     name: 'dotnet'
     exists: apiAppExists
+    targetPort: 8080
   }
 ]
 
@@ -263,6 +265,7 @@ module apiApps './apps/api.bicep' = [for apiapp in apiapps: {
     containerRegistryHostSuffix: containerRegistryHostSuffix
     corsAcaUrl: 'https://${abbrs.appContainerApps}${resourceToken}-web-${apiapp.name}.${containerApps.outputs.defaultDomain}'
     exists: apiapp.exists
+    targetPort: apiapp.targetPort
   }
 }]
 
@@ -270,10 +273,12 @@ var webapps = [
   {
     name: 'node'
     exists: webAppExists
+    targetPort: 3000
   }
   {
     name: 'dotnet'
     exists: webAppExists
+    targetPort: 8080
   }
 ]
 
@@ -292,6 +297,7 @@ module webApps './apps/web.bicep' = [for webapp in webapps: {
     containerRegistryName: containerApps.outputs.registryName
     containerRegistryHostSuffix: containerRegistryHostSuffix
     exists: webapp.exists
+    targetPort: webapp.targetPort
   }
 }]
 

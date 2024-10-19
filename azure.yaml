@@ -17,18 +17,26 @@ services:
     host: containerapp
     language: csharp
     project: ./dotnet/src/ApiApp
+    docker:
+      remoteBuild: true
   containerapp-web-dotnet:
     host: containerapp
     language: csharp
     project: ./dotnet/src/WebApp
+    docker:
+      remoteBuild: true
   containerapp-api-node:
     host: containerapp
     language: js
     project: ./nodejs/webapi
+    docker:
+      remoteBuild: true
   containerapp-web-node:
     host: containerapp
     language: js
     project: ./nodejs/webapp
+    docker:
+      remoteBuild: true
 
 hooks:
   preup:

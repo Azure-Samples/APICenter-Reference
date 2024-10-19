@@ -19,41 +19,37 @@ echo "Importing API definitions..."
 
 RESOURCE_GROUP="rg-$AZURE_ENV_NAME"
 APIC_NAME=$AZURE_API_CENTER
-DEFINITIONs=(
-    "pet-store-api:openapi:petstore.yaml"
-    "star-wars-api:graphql:star-wars-swapi.graphql"
-    "global-weather-api:wsdl:globalweather.wsdl"
+DEFINITIONS=(
+    '{ "id": "pet-store-api", "specification": { "name": "openapi" }, "value": "petstore.yaml" }'
+    '{ "id": "star-wars-api", "specification": { "name": "graphql" }, "value": "star-wars-swapi.graphql" }'
+    '{ "id": "global-weather-api", "specification": { "name": "wsdl" }, "value": "globalweather.wsdl" }'
 )
 
 # Get the list of APIs registered in the API Center
 API_IDs=$(az apic api list -g $RESOURCE_GROUP -n $APIC_NAME --query "[].name" -o json | jq -r '.[]')
 
 # Iterate over the APIs and import the API definitions
-for API_ID in $API_IDs
-do
+for API_ID in $API_IDs; do
     VERSION_ID=$(az apic api version list -g $RESOURCE_GROUP -n $APIC_NAME --api-id $API_ID --query "[].name" -o tsv)
     DEFINITION_ID=$(az apic api definition list -g $RESOURCE_GROUP -n $APIC_NAME --api-id $API_ID --version-id $VERSION_ID --query "[].name" -o tsv)
 
-    for DEFINITION in "${DEFINITIONs[@]}"
-    do
-        IFS=':' read -r -a array <<< "$DEFINITION"
-        if [ "${array[0]}" = "$DEFINITION_ID" ]
-        then
-            SPECIFICATION="{\"name\":\"${array[1]}\"}"
-            VALUE="${array[2]}"
-            break
+    for DEFINITION in "${DEFINITIONS[@]}"; do
+        DEFINITION_ID_JSON=$(echo "$DEFINITION" | jq -r '.id')
+        if [[ "$DEFINITION_ID_JSON" == "$DEFINITION_ID" ]]; then
+            SPECIFICATION=$(echo "$DEFINITION" | jq -c '.specification')
+            VALUE=$(echo "$DEFINITION" | jq -r '.value')
+
+            az apic api definition import-specification \
+                -g "$RESOURCE_GROUP" \
+                -n "$APIC_NAME" \
+                --api-id "$API_ID" \
+                --version-id "$VERSION_ID" \
+                --definition-id "$DEFINITION_ID" \
+                --specification "$SPECIFICATION" \
+                --format inline \
+                --value "@./infra/apis/$VALUE"
         fi
     done
-
-    az apic api definition import-specification \
-        -g $RESOURCE_GROUP \
-        -n $APIC_NAME \
-        --api-id $API_ID \
-        --version-id $VERSION_ID \
-        --definition-id $DEFINITION_ID \
-        --specification "$SPECIFICATION" \
-        --format inline \
-        --value "@./infra/apis/$VALUE"
 done
 
 # Get the list of APIs registered in the API Management
