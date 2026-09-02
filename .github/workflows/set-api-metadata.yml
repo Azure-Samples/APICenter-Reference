@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install APIC extension
         shell: bash
@@ -49,7 +49,7 @@ jobs:
           az extension add --name apic-extension --allow-preview true --yes
 
       - name: Login to Azure
-        uses: Azure/login@v2
+        uses: Azure/login@v3
         with:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -57,11 +57,18 @@ jobs:
 
       - name: Set Custom Metadata
         shell: bash
+        env:
+          RESOURCE_ID: ${{ inputs['resource-id'] }}
+          RESOURCE_GROUP: ${{ inputs['resource-group'] }}
+          SERVICE_NAME: ${{ inputs['service-name'] }}
+          API_ID: ${{ inputs['api-id'] }}
+          METADATA_KEY: ${{ inputs['metadata-key'] }}
+          METADATA_VALUE: ${{ inputs['metadata-value'] }}
         run: |
           ./infra/scripts/set-apimetadata.sh \
-            --resource-id "${{ github.event.inputs.resource-id }}" \
-            --resource-group "${{ github.event.inputs.resource-group }}" \
-            --service-name "${{ github.event.inputs.service-name }}" \
-            --api-id "${{ github.event.inputs.api-id }}" \
-            --metadata-key "${{ github.event.inputs.metadata-key }}" \
-            --metadata-value "${{ github.event.inputs.metadata-value }}"
+            --resource-id "$RESOURCE_ID" \
+            --resource-group "$RESOURCE_GROUP" \
+            --service-name "$SERVICE_NAME" \
+            --api-id "$API_ID" \
+            --metadata-key "$METADATA_KEY" \
+            --metadata-value "$METADATA_VALUE"

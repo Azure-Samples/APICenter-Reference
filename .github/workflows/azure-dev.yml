@@ -36,17 +36,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.x'
 
       - name: Setup node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 'lts/Iron'
+          node-version: 'lts/*'
 
       - name: Install SWA CLI
         shell: bash
@@ -67,14 +67,14 @@ jobs:
 
       - name: Login to Azure CLI (Federated Credentials)
         if: ${{ env.AZURE_CLIENT_ID != '' }}
-        uses: Azure/login@v2
+        uses: Azure/login@v3
         with:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
           tenant-id: ${{ env.AZURE_TENANT_ID }}
 
       - name: Log in with Azure Developer CLI (Client Credentials)
-        if: ${{ env.AZURE_CREDENTIALS != '' }}
+        if: ${{ env.AZURE_CLIENT_ID == '' && env.AZURE_CREDENTIALS != '' }}
         run: |
           $info = $Env:AZURE_CREDENTIALS | ConvertFrom-Json -AsHashtable;
           Write-Host "::add-mask::$($info.clientSecret)"
@@ -88,8 +88,8 @@ jobs:
           AZURE_CREDENTIALS: ${{ env.AZURE_CREDENTIALS }}
 
       - name: Login to Azure CLI (Client Credentials)
-        if: ${{ env.AZURE_CREDENTIALS != '' }}
-        uses: Azure/login@v2
+        if: ${{ env.AZURE_CLIENT_ID == '' && env.AZURE_CREDENTIALS != '' }}
+        uses: Azure/login@v3
         with:
           creds: ${{ env.AZURE_CREDENTIALS }}
 

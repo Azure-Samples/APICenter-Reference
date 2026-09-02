@@ -2,7 +2,7 @@
 
 # This registers API to API Center.
 
-set -e
+set -euo pipefail
 
 function usage() {
     cat <<USAGE
@@ -20,8 +20,14 @@ function usage() {
         -h|--help:                              Show this message.
 
 USAGE
+}
 
-    exit 1
+function require_value() {
+    if [[ $# -lt 2 ]]; then
+        echo "Option '$1' requires a value." >&2
+        usage >&2
+        exit 1
+    fi
 }
 
 RESOURCE_ID=
@@ -31,102 +37,108 @@ FILE_LOCATION=
 API_MANAGEMENT_ID=
 API_VERSION="2024-03-01"
 
-if [[ $# -eq 0 ]]; then
-    RESOURCE_ID=
-    RESOURCE_GROUP=
-    SERVICE_NAME=
-    FILE_LOCATION=
-    API_MANAGEMENT_ID=
-    API_VERSION="2024-03-01"
-fi
-
-while [[ "$1" != "" ]]; do
-    case $1 in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         --resource-id)
-            shift
-            RESOURCE_ID="$1"
+            require_value "$@"
+            RESOURCE_ID="$2"
+            shift 2
         ;;
 
         -g | --resource-group)
-            shift
-            RESOURCE_GROUP="$1"
+            require_value "$@"
+            RESOURCE_GROUP="$2"
+            shift 2
         ;;
 
         -s | -n | --service | --name | --service-name)
-            shift
-            SERVICE_NAME="$1"
+            require_value "$@"
+            SERVICE_NAME="$2"
+            shift 2
         ;;
 
         -f | --file-location)
-            shift
-            FILE_LOCATION="$1"
+            require_value "$@"
+            FILE_LOCATION="$2"
+            shift 2
         ;;
 
         --api-management-id)
-            shift
-            API_MANAGEMENT_ID="$1"
+            require_value "$@"
+            API_MANAGEMENT_ID="$2"
+            shift 2
         ;;
 
         --api-version)
-            shift
-            API_VERSION="$1"
+            require_value "$@"
+            API_VERSION="$2"
+            shift 2
         ;;
 
         -h | --help)
             usage
-            exit 1
+            exit 0
         ;;
 
         *)
-            usage
+            echo "Unknown option: $1" >&2
+            usage >&2
             exit 1
         ;;
     esac
-
-    shift
 done
 
-if [ -z "$RESOURCE_ID" ] && [ -z "$RESOURCE_GROUP" -o -z "$SERVICE_NAME" ] ; then
-    echo "'resource-id' must be provided, or both 'resource-group' and 'service-name' must be provided"
-    exit 0
+if [[ -z "$RESOURCE_ID" && ( -z "$RESOURCE_GROUP" || -z "$SERVICE_NAME" ) ]]; then
+    echo "'resource-id' must be provided, or both 'resource-group' and 'service-name' must be provided" >&2
+    exit 1
 fi
-if [ -z "$FILE_LOCATION" ] && [ -z "$API_MANAGEMENT_ID" ] ; then
-    echo "'file-lcation' must be provided"
-    exit 0
+if [[ -z "$FILE_LOCATION" && -z "$API_MANAGEMENT_ID" ]]; then
+    echo "'file-location' or 'api-management-id' must be provided" >&2
+    exit 1
 fi
-if [ -z "$FILE_LOCATION" ] && [[ "$API_MANAGEMENT_ID" != /subscriptions/* ]] ; then
-    echo "'api-management-id' must be a valid resource ID"
-    exit 0
+if [[ -n "$API_MANAGEMENT_ID" && "$API_MANAGEMENT_ID" != /subscriptions/* ]]; then
+    echo "'api-management-id' must be a valid resource ID" >&2
+    exit 1
 fi
 
 IFS='/' read -ra SEGMENTS <<< "$RESOURCE_ID"
-if [ -z "$RESOURCE_GROUP" ] ; then
+if [[ -z "$RESOURCE_GROUP" ]]; then
     RESOURCE_GROUP=${SEGMENTS[4]}
 fi
-if [ -z "$SERVICE_NAME" ] ; then
+if [[ -z "$SERVICE_NAME" ]]; then
     SERVICE_NAME=${SEGMENTS[8]}
 fi
 
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 
-if [ -z "$API_MANAGEMENT_ID" ] ; then
+if [[ -z "$API_MANAGEMENT_ID" ]]; then
     echo "Registering API from a file: $FILE_LOCATION ..."
 
-    registered=$(az apic api register \
-    -g $RESOURCE_GROUP \
-    -s $SERVICE_NAME \
-    --api-location "$REPOSITORY_ROOT/$FILE_LOCATION")
+    az apic api register \
+        -g "$RESOURCE_GROUP" \
+        -s "$SERVICE_NAME" \
+        --api-location "$REPOSITORY_ROOT/$FILE_LOCATION"
 else
     echo "Registering API from API Management: $API_MANAGEMENT_ID ..."
 
     IFS='/' read -ra SEGMENTS <<< "$API_MANAGEMENT_ID"
-    API_IDs=$(az apim api list -g $SEGMENTS[4] -n $SEGMENTS[8] --query "[].id" | jq -r '.[]')
+    API_IDS_OUTPUT=$(az apim api list \
+        -g "${SEGMENTS[4]}" \
+        -n "${SEGMENTS[8]}" \
+        --query "[].id" \
+        --output tsv)
 
-    for API_ID in API_IDs
-    do
-        registered=$(az apic service import-from-apim \
-            -g $RESOURCE_GROUP \
-            -s $SERVICE_NAME \
-            --source-resource-ids $API_ID)
+    if [[ -z "$API_IDS_OUTPUT" ]]; then
+        echo "No APIs were found in the API Management service." >&2
+        exit 1
+    fi
+
+    mapfile -t API_IDS <<< "$API_IDS_OUTPUT"
+
+    for API_ID in "${API_IDS[@]}"; do
+        az apic service import-from-apim \
+            -g "$RESOURCE_GROUP" \
+            -s "$SERVICE_NAME" \
+            --source-resource-ids "$API_ID"
     done
 fi
