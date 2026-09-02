@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install APIC extension
         shell: bash
@@ -47,7 +47,7 @@ jobs:
           az extension add --name apic-extension --allow-preview true --yes
 
       - name: Login to Azure
-        uses: Azure/login@v2
+        uses: Azure/login@v3
         with:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -55,10 +55,16 @@ jobs:
 
       - name: Register API
         shell: bash
+        env:
+          RESOURCE_ID: ${{ inputs['resource-id'] }}
+          RESOURCE_GROUP: ${{ inputs['resource-group'] }}
+          SERVICE_NAME: ${{ inputs['service-name'] }}
+          FILE_LOCATION: ${{ inputs['file-location'] }}
+          API_MANAGEMENT_ID: ${{ inputs['api-management-id'] }}
         run: |
           ./infra/scripts/new-apiregistration.sh \
-            --resource-id "${{ github.event.inputs.resource-id }}" \
-            --resource-group "${{ github.event.inputs.resource-group }}" \
-            --service-name "${{ github.event.inputs.service-name }}" \
-            --file-location "${{ github.event.inputs.file-location }}" \
-            --api-management-id "${{ github.event.inputs.api-management-id }}"
+            --resource-id "$RESOURCE_ID" \
+            --resource-group "$RESOURCE_GROUP" \
+            --service-name "$SERVICE_NAME" \
+            --file-location "$FILE_LOCATION" \
+            --api-management-id "$API_MANAGEMENT_ID"

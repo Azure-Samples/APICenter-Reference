@@ -2,7 +2,7 @@
 
 # This sets the metadata for the API registered on API Center.
 
-set -e
+set -euo pipefail
 
 function usage() {
     cat <<USAGE
@@ -23,8 +23,14 @@ function usage() {
         -h|--help:                              Show this message.
 
 USAGE
+}
 
-    exit 1
+function require_value() {
+    if [[ $# -lt 2 ]]; then
+        echo "Option '$1' requires a value." >&2
+        usage >&2
+        exit 1
+    fi
 }
 
 RESOURCE_ID=
@@ -35,78 +41,74 @@ METADATA_KEY=
 METADATA_VALUE=
 API_VERSION="2024-03-01"
 
-if [[ $# -eq 0 ]]; then
-    RESOURCE_ID=
-    RESOURCE_GROUP=
-    SERVICE_NAME=
-    API_ID=
-    METADATA_KEY=
-    METADATA_VALUE=
-    API_VERSION="2024-03-01"
-fi
-
-while [[ "$1" != "" ]]; do
-    case $1 in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         --resource-id)
-            shift
-            RESOURCE_ID="$1"
+            require_value "$@"
+            RESOURCE_ID="$2"
+            shift 2
         ;;
 
         -g | --resource-group)
-            shift
-            RESOURCE_GROUP="$1"
+            require_value "$@"
+            RESOURCE_GROUP="$2"
+            shift 2
         ;;
 
         -s | -n | --service | --name | --service-name)
-            shift
-            SERVICE_NAME="$1"
+            require_value "$@"
+            SERVICE_NAME="$2"
+            shift 2
         ;;
 
         --api-id)
-            shift
-            API_ID="$1"
+            require_value "$@"
+            API_ID="$2"
+            shift 2
         ;;
 
         -k | --key | --metadata-key)
-            shift
-            METADATA_KEY="$1"
+            require_value "$@"
+            METADATA_KEY="$2"
+            shift 2
         ;;
 
         -v | --value | --metadata-value)
-            shift
-            METADATA_VALUE="$1"
+            require_value "$@"
+            METADATA_VALUE="$2"
+            shift 2
         ;;
 
         --api-version)
-            shift
-            API_VERSION="$1"
+            require_value "$@"
+            API_VERSION="$2"
+            shift 2
         ;;
 
         -h | --help)
             usage
-            exit 1
+            exit 0
         ;;
 
         *)
-            usage
+            echo "Unknown option: $1" >&2
+            usage >&2
             exit 1
         ;;
     esac
-
-    shift
 done
 
-if [ -z "$RESOURCE_ID" ] && ( [ -z "$RESOURCE_GROUP" ] || [ -z "$SERVICE_NAME" ] ); then
-    echo "'resource-id' must be provided, or both 'resource-group' and 'service-name' must be provided"
-    exit 0
+if [[ -z "$RESOURCE_ID" && ( -z "$RESOURCE_GROUP" || -z "$SERVICE_NAME" ) ]]; then
+    echo "'resource-id' must be provided, or both 'resource-group' and 'service-name' must be provided" >&2
+    exit 1
 fi
-if [ -z "$API_ID" ]; then
-    echo "'api-id' must be provided"
-    exit 0
+if [[ -z "$API_ID" ]]; then
+    echo "'api-id' must be provided" >&2
+    exit 1
 fi
-if [ -z "$METADATA_KEY" ] || [ -z "$METADATA_VALUE" ]; then
-    echo "Both 'metadata-key' and 'metadata-value' must be provided"
-    exit 0
+if [[ -z "$METADATA_KEY" || -z "$METADATA_VALUE" ]]; then
+    echo "Both 'metadata-key' and 'metadata-value' must be provided" >&2
+    exit 1
 fi
 
 IFS='/' read -ra SEGMENTS <<< "$RESOURCE_ID"
@@ -117,10 +119,13 @@ if [ -z "$SERVICE_NAME" ]; then
     SERVICE_NAME=${SEGMENTS[8]}
 fi
 
-CUSTOM_PROPERTIES=$(echo "{\"$METADATA_KEY\":\"$METADATA_VALUE\"}" | jq -c .)
+CUSTOM_PROPERTIES=$(jq -nc \
+    --arg key "$METADATA_KEY" \
+    --arg value "$METADATA_VALUE" \
+    '{($key): $value}')
 
-updated=$(az apic api update \
-    -g $RESOURCE_GROUP \
-    -s $SERVICE_NAME \
-    --api-id $API_ID \
-    --custom-properties $CUSTOM_PROPERTIES)
+az apic api update \
+    -g "$RESOURCE_GROUP" \
+    -s "$SERVICE_NAME" \
+    --api-id "$API_ID" \
+    --custom-properties "$CUSTOM_PROPERTIES"
